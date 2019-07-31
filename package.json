@@ -11,8 +11,9 @@
     "@babel/runtime": "^7.1.5",
     "classnames": "^2.2.6",
     "meteor-node-stubs": "^0.4.1",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "shortid": "^2.2.14"
   },
   "meteor": {
     "mainModule": {
@@ -22,6 +23,7 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "jest": "^24.8.0"
   }
 }

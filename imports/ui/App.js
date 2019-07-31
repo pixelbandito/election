@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { Tasks } from '../api/tasks.js';
+import { Polls } from '../api/polls.js';
 
-import Task from './Task.js';
+import PollForm from './PollForm';
+
+import Poll from './Poll';
 import AccountsUIWrapper from './AccountsUIWrapper.js';
 
 // App component - represents the whole app
@@ -14,78 +15,58 @@ class App extends Component {
     super(props);
 
     this.state = {
-      hideCompleted: false,
+      hideNotMine: false,
     };
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    // Find the text field via the React ref
-    const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
-
-    Meteor.call('tasks.insert', text);
-
-    // Clear form
-    ReactDOM.findDOMNode(this.refs.textInput).value = '';
-  }
-
-  toggleHideCompleted() {
+  toggleHideNotMine() {
     this.setState({
-      hideCompleted: !this.state.hideCompleted,
+      hideNotMine: !this.state.hideNotMine,
     });
   }
 
-  renderTasks() {
-    let filteredTasks = this.props.tasks;
-    if (this.state.hideCompleted) {
-      filteredTasks = filteredTasks.filter(task => !task.checked);
-    }
-    return filteredTasks.map((task) => {
-      const currentUserId = this.props.currentUser && this.props.currentUser._id;
-      const showPrivateButton = task.owner === currentUserId;
+  renderPolls() {
+    const currentUserId = this.props.currentUser && this.props.currentUser._id;
+    let filteredPolls = this.props.polls;
 
-      return (
-        <Task
-          key={task._id}
-          task={task}
-          showPrivateButton={showPrivateButton}
-        />
-      );
-    });
+    if (this.state.hideNotMine) {
+      filteredPolls = filteredPolls.filter(poll => !poll.ownerId === currentUserId);
+    }
+
+    return filteredPolls.map((poll) => (
+      <Poll
+        key={poll._id}
+        poll={poll}
+        ownedByCurrentUser={poll.ownerId === currentUserId}
+      />
+    ));
   }
 
   render() {
     return (
       <div className="container">
         <header>
-          <h1>Todo List ({this.props.incompleteCount})</h1>
+          <h1>Polls ({this.props.myPollsCount})</h1>
 
-          <label className="hide-completed">
+          <label className="hide-not-mine">
             <input
               type="checkbox"
               readOnly
-              checked={this.state.hideCompleted}
-              onClick={this.toggleHideCompleted.bind(this)}
+              checked={this.state.hideNotMine}
+              onClick={this.toggleHideNotMine.bind(this)}
             />
-            Hide Completed Tasks
+            Show only my polls
           </label>
 
           <AccountsUIWrapper />
 
           { this.props.currentUser ?
-            <form className="new-task" onSubmit={this.handleSubmit.bind(this)} >
-              <input
-                type="text"
-                ref="textInput"
-                placeholder="Type to add new tasks"
-              />
-            </form> : ''
+            <PollForm onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}/> : ''
           }
         </header>
 
         <ul>
-          {this.renderTasks()}
+          {this.renderPolls()}
         </ul>
       </div>
     );
@@ -93,11 +74,12 @@ class App extends Component {
 }
 
 export default withTracker(() => {
-  Meteor.subscribe('tasks');
+  Meteor.subscribe('polls');
 
+  const currentUser = Meteor.user();
   return {
-    tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),
-    incompleteCount: Tasks.find({ checked: { $ne: true } }).count(),
-    currentUser: Meteor.user(),
+    polls: Polls.find({}, { sort: { createdAt: -1 } }).fetch(),
+    myPollsCount: Polls.find({ ownerId: currentUser && currentUser._id },).count(),
+    currentUser,
   };
 })(App);
