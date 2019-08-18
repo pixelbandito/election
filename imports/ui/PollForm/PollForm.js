@@ -8,14 +8,20 @@ import CandidateForm from '../CandidateForm';
   dateCreated: new Date(0).valueOf(),
   dateUpdated: new Date(0).valueOf(),
   enabled: false,
+  public: false,
   name: '',
   ownerId: '',
 */}
 
-const PollForm = ({ initPollForm, onSubmit }) => {
+const PollForm = ({
+  initPollForm,
+  onBack,
+  onSubmit,
+}) => {
   const [pollForm, setPollForm] = useState(initPollForm || {
     candidates: [],
     enabled: false,
+    public: false,
     name: '',
   });
 
@@ -23,11 +29,13 @@ const PollForm = ({ initPollForm, onSubmit }) => {
 
   const nameInputRef = createRef();
   const enabledInputRef = createRef();
+  const publicInputRef = createRef();
 
   useEffect(() => {
     nameInputRef.value = pollForm.name;
     enabledInputRef.checked = pollForm.enabled;
-  }, [nameInputRef.current, enabledInputRef.current]);
+    publicInputRef.checked = pollForm.public;
+  }, [nameInputRef.current, enabledInputRef.current, publicInputRef.current]);
 
   const handleSetCandidates = (nextCandidates) => {
     setPollForm({
@@ -54,27 +62,44 @@ const PollForm = ({ initPollForm, onSubmit }) => {
     });
   };
 
+  const handleChangePublic = (event) => {
+    const public = event.target.checked;
+
+    setPollForm({
+      ...pollForm,
+      public,
+    });
+  };
+
   const handleSubmitPoll = (event) => {
     event.preventDefault();
 
     const nameInput = nameInputRef.current;
     const enabledInput = enabledInputRef.current;
+    const publicInput = publicInputRef.current;
 
-    if (!pollForm.name || !nameInput || !enabledInput) {
+    if (!pollForm.name || !nameInput || !enabledInput || !publicInput) {
       return;
     }
 
     onSubmit(pollForm);
 
     // Clear form
-    nameInput.value = '';
-    enabledInput.checked = false;
-    handleSetCandidates([]);
+    setPollForm({
+      name: '',
+      enabled: false,
+      public: false,
+      candidates: [],
+    });
+
     setResetDate(new Date().toISOString())
   };
 
   return (
     <form onSubmit={handleSubmitPoll}>
+      <section>
+        <button type="button" onClick={onBack}>x</button>
+      </section>
       <section>
         <label htmlFor={`${pollForm._id || ''}-createPoll__name`}>Name</label>
         <input
@@ -105,6 +130,18 @@ const PollForm = ({ initPollForm, onSubmit }) => {
             checked={pollForm.enabled}
           />
           Enabled
+        </label>
+      </section>
+      <section>
+        <label htmlFor={`${pollForm._id || ''}-createPoll__public`}>
+          <input
+            id={`${pollForm._id || ''}-createPoll__public`}
+            onChange={handleChangePublic}
+            ref={publicInputRef}
+            type="checkbox"
+            checked={pollForm.public}
+          />
+          Public
         </label>
       </section>
       <section>

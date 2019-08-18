@@ -14,6 +14,7 @@ export const creatablePollType = {
   dateCreated: Match.Maybe(Number),
   dateUpdated: Match.Maybe(Number),
   enabled: Boolean,
+  public: Boolean,
   name: String,
 };
 
@@ -28,6 +29,7 @@ export const defaults = {
   dateCreated: new Date(0).valueOf(),
   dateUpdated: new Date(0).valueOf(),
   enabled: false,
+  public: false,
   name: '',
   ownerId: '',
 };
@@ -46,7 +48,7 @@ if (Meteor.isServer) {
     return Polls.find({
       $or: [
         { ownerId: this.userId },
-        { enabled: { $eq: true } },
+        { public: { $eq: true } },
       ],
     });
   });

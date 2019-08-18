@@ -1,3 +1,7 @@
-import Poll from './Poll';
+import SummaryComp from './Summary';
 
-export default Poll;
+export const Summary = SummaryComp;
+
+export default {
+  Summary
+};

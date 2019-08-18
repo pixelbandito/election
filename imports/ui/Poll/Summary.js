@@ -10,14 +10,18 @@ candidates: [],
 dateCreated: new Date(0).valueOf(),
 dateUpdated: new Date(0).valueOf(),
 enabled: false,
+public: false,
 name: '',
 ownerId: '',
 */
 
 // Poll component - represents a single todo item
-const Poll = ({
+const Summary = ({
+  ballotsCount,
   poll,
   ownedByCurrentUser,
+  setVotingPollId,
+  setViewingResultsPollId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -26,18 +30,35 @@ const Poll = ({
   const pollClassName = classNames({
     editable: ownedByCurrentUser,
     enabled: !poll.enabled,
+    public: poll.enabled,
+    private: !poll.enabled,
     disabled: !poll.enabled,
   });
 
   return (
     <li className={pollClassName}>
-      {!isEditing ? (
+      {!isEditing && (
         <Fragment>
           <span className="text">
-            {JSON.stringify(poll)}
+            {poll.name && <h4>{poll.name}</h4>}
+            <p><em>Created {Date(poll.dateCreated).toLocaleString()}</em></p>
+            {poll.candidates && poll.candidates.length && <p>Candidates: {poll.candidates.map(c => c.name).join(', ')}</p>}
+            <p>{poll.enabled ? 'Enabled' : 'Disabled'}, {poll.public ? 'public' : 'private'}</p>
+            <p>Votes: {ballotsCount}</p>
             {ownedByCurrentUser}
           </span>
-
+          {poll.enabled &&
+            <button type="button" onClick={() => setVotingPollId(poll._id)}>
+              Vote!
+            </button>
+          }
+          {ownedByCurrentUser &&
+            <button type="button"
+              onClick={() => setViewingResultsPollId(poll._id)}
+            >
+              See results
+            </button>
+          }
           {ownedByCurrentUser ? (
             <Fragment>
               <button type="button" onClick={() => setIsEditing(true)}>
@@ -49,9 +70,11 @@ const Poll = ({
             </Fragment>
           ) : ''}
         </Fragment>
-      ) : (
+      )}
+      {isEditing && (
         <PollForm
           initPollForm={poll}
+          onBack={() => setIsEditing(false)}
           onSubmit={(pollForm) => {
             Meteor.call('polls.set', pollForm);
             setIsEditing(false);
@@ -62,4 +85,4 @@ const Poll = ({
   );
 }
 
-export default Poll;
+export default Summary;

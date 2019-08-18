@@ -41,6 +41,7 @@ export const creatableBallotType = {
   dateUpdated: Match.Maybe(Number),
   pollId: String,
   submitted: Boolean,
+  voterName: String,
 };
 
 export const ballotType = {

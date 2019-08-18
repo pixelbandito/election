@@ -22,6 +22,7 @@ if (Meteor.isServer) {
           dateCreated: 8,
           dateUpdated: 42,
           enabled: true,
+          public: true,
           name: 'Poll Foo',
           ownerId: userId,
         });
@@ -37,6 +38,7 @@ if (Meteor.isServer) {
         const creatablePoll = {
           candidates: [],
           enabled: false,
+          public: false,
           name: 'Poll Foo',
         };
 
@@ -80,6 +82,7 @@ if (Meteor.isServer) {
               name: 'Pat',
             }],
             enabled: false,
+            public: false,
             name: 'Poll Bar',
           }]);
 
@@ -91,6 +94,7 @@ if (Meteor.isServer) {
             candidates: prevPoll.candidates,
             dateCreated: prevPoll.dateCreated,
             enabled: prevPoll.enabled,
+            public: prevPoll.public,
             _id: prevPoll._id,
             name: prevPoll.name,
             ownerId: prevPoll.ownerId,
@@ -103,6 +107,7 @@ if (Meteor.isServer) {
               name: 'Pat',
             }],
             enabled: false,
+            public: false,
             name: 'Poll Bar',
           });
 
