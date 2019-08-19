@@ -1,5 +1,5 @@
 import React, { Component, Fragment, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
@@ -83,7 +83,10 @@ const App = ({
               </ul>
             </Fragment>
           )} />
-        <Route path="/">
+          <Route>
+            <Redirect to="/polls" />
+          </Route>
+        {/*<Route path="/">
             {votingPollId && (
               <BallotForm
                 poll={polls.find(poll => poll._id === votingPollId)}
@@ -133,7 +136,7 @@ const App = ({
                 </ul>
               </Fragment>
             )}
-          </Route>
+          </Route>*/}
         </Switch>
       </div>
     </Router>

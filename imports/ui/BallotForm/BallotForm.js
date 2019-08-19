@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 /*
 export const defaultBallot = {
   candidateIdRanks: [],
@@ -12,6 +12,7 @@ export const defaultBallot = {
 };
 */
 
+// TODO: Candidates disappear on refresh!
 const BallotForm = ({
   pollsReady,
   poll,
