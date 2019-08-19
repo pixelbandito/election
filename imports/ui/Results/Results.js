@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const candidatesEliminatedErrorMessage = 'All candidates have been eliminated.';
 const candidatesMissingErrorMessage = 'Coulnd\'t find any candidates.';
@@ -90,7 +91,6 @@ const calculateResults = ({
 const Results = ({
   ballots,
   match,
-  onBack,
   poll,
 }) => {
   const [winnerIds, setWinnerIds] = useState([]);
@@ -131,7 +131,7 @@ const Results = ({
   return (
     <div>
       <section>
-        <button type="button" onClick={onBack}>←</button>
+        <Link to="/polls">←</Link>
       </section>
       <section>
         <h1>{poll.name}</h1>

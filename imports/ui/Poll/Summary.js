@@ -21,8 +21,6 @@ const Summary = ({
   ballotsCount,
   poll,
   ownedByCurrentUser,
-  setVotingPollId,
-  setViewingResultsPollId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -54,11 +52,9 @@ const Summary = ({
             </Link>
           }
           {ownedByCurrentUser &&
-            <button type="button"
-              onClick={() => setViewingResultsPollId(poll._id)}
-            >
+            <Link to={`/polls/${poll._id}/results`}>
               See results
-            </button>
+            </Link>
           }
           {ownedByCurrentUser ? (
             <Fragment>

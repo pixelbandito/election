@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 /*
 export const defaultBallot = {
   candidateIdRanks: [],

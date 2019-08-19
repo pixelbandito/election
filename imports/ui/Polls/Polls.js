@@ -7,8 +7,6 @@ const Polls = ({
   currentUser,
   hideNotMine,
   polls,
-  setViewingResultsPollId,
-  setVotingPollId,
 }) => {
   const currentUserId = currentUser && currentUser._id;
   let filteredPolls = polls;
@@ -30,8 +28,6 @@ const Polls = ({
       key={poll._id}
       poll={poll}
       ownedByCurrentUser={poll.ownerId === currentUserId}
-      setVotingPollId={setVotingPollId}
-      setViewingResultsPollId={setViewingResultsPollId}
     />
   ));
 };
