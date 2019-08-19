@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link, Redirect } from 'react-router-dom';
 /*
@@ -16,8 +16,11 @@ export const defaultBallot = {
 const BallotForm = ({
   pollsReady,
   poll,
-  onBack,
 }) => {
+  // When the ballot is cast, this controls the Redirect component
+  const [goHome, setGoHome] = useState(false);
+
+  // Shuffle candidates for fairer voting
   const shuffledCandidateIds = useMemo(() => {
     const shuffledCandidates = poll ? [...poll.candidates] : [];
     shuffledCandidates.sort(() => Math.random() > 0.5 ? 1 : -1);
@@ -31,7 +34,21 @@ const BallotForm = ({
     voterName: '',
   });
 
-  const [goHome, setGoHome] = useState(false);
+  /*
+    When polls are loaded after the component, e.g. when the user goes straight
+    to this page via URL, update the ballot form.
+  */
+  useEffect(() => {
+    if (poll && shuffledCandidateIds) {
+      setBallotForm({
+        ...ballotForm,
+        candidateIdRanks: shuffledCandidateIds || [],
+        pollId: poll && poll._id,
+        submitted: false,
+        voterName: '',
+      });
+    }
+  }, [poll, shuffledCandidateIds]);
 
   if (!poll) {
     return (

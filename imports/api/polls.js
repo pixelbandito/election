@@ -138,8 +138,6 @@ Meteor.methods({
   //
   //   const candidates = [...poll.candidates, candidate];
   //
-  //   // TODO: Update poll
-  //
   //   Polls.update(pollId, { $set: { candidates } });
   // },
   // 'polls.deletePollCandidate'(pollId, candidateId) {
@@ -163,7 +161,6 @@ Meteor.methods({
   //   const candidates = [...poll.candidates];
   //   candidates.splice(poll.candidates.indexOf(candidateToRemove, 1));
   //
-  //   // TODO: Update poll
   //   Polls.update(pollId, { $set: { candidates } });
   // }
 });

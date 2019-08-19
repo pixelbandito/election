@@ -23,7 +23,6 @@ const calculateResults = ({
   roundIndex = 1,
   winningThreshold,
 }) => {
-  // TODO: Second round should be transferrable votes. not second round of voting
   const votes = getRoundVotes({ ballotsArray });
   const candidateIds = candidates.map(c => c.id);
 
@@ -57,8 +56,7 @@ const calculateResults = ({
     if (loserIds.length) {
       console.log('We have some losers!', { loserIds });
 
-      // TODO: Remove losers and go again.
-
+      // Remove losers and go again.
       const nextCandidates = candidates.filter(candidate => loserIds.indexOf(candidate.id) < 0);
       nextBallotsArray = nextBallotsArray.map(prevBallot => ({
         ...prevBallot,
