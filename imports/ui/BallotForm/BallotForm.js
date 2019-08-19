@@ -42,15 +42,17 @@ const BallotForm = ({ onBack, poll }) => {
       const nextCandidateIdRanks = [...prevCandidateIdRanks];
       nextCandidateIdRanks.splice(prevCandidateIdRanks.indexOf(candidateId), 1);
       nextCandidateIdRanks.splice(nextRank, 0, candidateId);
-      setBallotForm({ candidateIdRanks: nextCandidateIdRanks });
+      setBallotForm({
+        ...ballotForm,
+        candidateIdRanks: nextCandidateIdRanks,
+      });
     }
   }
 
-  handleSubmitBallot = (event) => {
+  handleSubmitBallot = async (event) => {
     event.preventDefault();
-    console.log({ ballotForm });
 
-    Meteor.call('ballots.insert', {
+    const result = await Meteor.call('ballots.insert', {
       ...ballotForm,
       submitted: true,
     });
@@ -58,11 +60,10 @@ const BallotForm = ({ onBack, poll }) => {
     onBack();
   };
 
-  handleClickSave = (event) => {
+  handleClickSave = async (event) => {
     event.preventDefault();
-    console.log({ ballotForm });
 
-    Meteor.call('ballots.insert', {
+    const result = await Meteor.call('ballots.insert', {
       ...ballotForm,
       submitted: false,
     });
@@ -93,7 +94,7 @@ const BallotForm = ({ onBack, poll }) => {
             />
           </section>
         <section>
-          <pre style={{ wordWrap: 'break-word', maxWidth: '100%', whiteSpace: 'normal' }}>{JSON.stringify(poll)}</pre>
+          <div style={{ wordWrap: 'break-word', maxWidth: '100%', whiteSpace: 'normal' }}>{JSON.stringify(ballotForm)}</div>
         </section>
         <section>
             <ul>
