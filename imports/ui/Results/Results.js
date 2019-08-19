@@ -87,10 +87,24 @@ const calculateResults = ({
   }
 }
 
-const Results = ({ ballots, onBack, poll }) => {
-  const { candidates } = poll;
+const Results = ({
+  ballots,
+  match,
+  onBack,
+  poll,
+}) => {
   const [winnerIds, setWinnerIds] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  if (!poll) {
+    return (
+      <div>
+        Loading...
+      </div>
+    );
+  }
+
+  const { candidates } = poll;
   const ballotsArray = ballots.sort((ballot, ballot2) => ballot.dateCreated > ballot2.dateCreated ? -1 : 1);
 
   handleClickCalculateWinners = () => {

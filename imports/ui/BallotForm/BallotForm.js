@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 /*
 export const defaultBallot = {
   candidateIdRanks: [],
@@ -11,19 +12,33 @@ export const defaultBallot = {
 };
 */
 
-const BallotForm = ({ onBack, poll }) => {
+const BallotForm = ({
+  pollsReady,
+  poll,
+  onBack,
+}) => {
   const shuffledCandidateIds = useMemo(() => {
-    const shuffledCandidates = [...poll.candidates];
+    const shuffledCandidates = poll ? [...poll.candidates] : [];
     shuffledCandidates.sort(() => Math.random() > 0.5 ? 1 : -1);
     return shuffledCandidates.map(candidate => candidate.id);
-  }, [poll.candidates]);
+  }, [poll && poll.candidates, pollsReady]);
 
   const [ballotForm, setBallotForm] = useState({
     candidateIdRanks: shuffledCandidateIds || [],
-    pollId: poll._id,
+    pollId: poll && poll._id,
     submitted: false,
     voterName: '',
   });
+
+  const [goHome, setGoHome] = useState(false);
+
+  if (!poll) {
+    return (
+      <div>
+        Loading...
+      </div>
+    );
+  }
 
   handleVoterChangeNameInput = event => {
     const nextVoterName = event.target.value || ballotForm.name;
@@ -57,7 +72,7 @@ const BallotForm = ({ onBack, poll }) => {
       submitted: true,
     });
 
-    onBack();
+    setGoHome(true);
   };
 
   handleClickSave = async (event) => {
@@ -68,15 +83,16 @@ const BallotForm = ({ onBack, poll }) => {
       submitted: false,
     });
 
-    onBack();
+    setGoHome(true);
   }
 
   const { candidates } = poll;
 
   return (
     <div>
+      {goHome && <Redirect to='/polls' />}
       <section>
-        <button type="button" onClick={onBack}>←</button>
+        <Link to="/polls">←</Link>
       </section>
       <section>
         <h1>{poll.name}</h1>

@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import PollForm from '../PollForm';
 import { Polls } from '../../api/polls.js';
@@ -48,9 +49,9 @@ const Summary = ({
             {ownedByCurrentUser}
           </span>
           {poll.enabled &&
-            <button type="button" onClick={() => setVotingPollId(poll._id)}>
+            <Link to={`/polls/${poll._id}/vote`} >
               Vote!
-            </button>
+            </Link>
           }
           {ownedByCurrentUser &&
             <button type="button"

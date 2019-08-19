@@ -1,134 +1,157 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { Polls } from '../api/polls.js';
-import { Ballots } from '../api/ballots.js';
+import { Polls as PollsApi } from '../api/polls.js';
+import { Ballots as BallotsApi } from '../api/ballots.js';
 
+import Polls from './Polls';
 import BallotForm from './BallotForm';
 import PollForm from './PollForm';
 import Results from './Results';
 
-import { Summary } from './Poll';
 import AccountsUIWrapper from './AccountsUIWrapper.js';
 
 // App component - represents the whole app
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = ({
+  ballots,
+  ballotsHandler,
+  ballotsReady,
+  currentUser,
+  myPollsCount,
+  polls,
+  pollsReady,
+}) => {
+  const [hideNotMine, setHideNotMine] = useState(false);
+  const [votingPollId, setVotingPollId] = useState(null);
+  const [viewingResultsPollId, setViewingResultsPollId] = useState(null);
 
-    this.state = {
-      hideNotMine: false,
-      votingPollId: null,
-      viewingResultsPollId: null,
-    };
-  }
+  console.log({ ballots, ballotsHandler, ballotsReady, polls, pollsReady });
 
-  toggleHideNotMine = () => {
-    this.setState({
-      hideNotMine: !this.state.hideNotMine,
-    });
-  }
-
-  setVotingPollId = (votingPollId) => {
-    console.log({ votingPollId });
-    this.setState({ votingPollId });
-  }
-
-  setViewingResultsPollId = (viewingResultsPollId) => {
-    console.log({ viewingResultsPollId });
-    this.setState({ viewingResultsPollId });
-  }
-
-  renderPolls = () => {
-    const currentUserId = this.props.currentUser && this.props.currentUser._id;
-    let filteredPolls = this.props.polls;
-    let ballotCountsByPollId = this.props.ballots && this.props.ballots.reduce((result, ballot) => {
-      result[ballot.pollId] = result[ballot.pollId] || 0;
-      result[ballot.pollId]++;
-      return result;
-    }, {});
-
-    console.log({
-      ballotCountsByPollId,
-    });
-
-    if (this.state.hideNotMine) {
-      filteredPolls = filteredPolls.filter(poll => !poll.ownerId === currentUserId);
-    }
-
-    filteredPolls = filteredPolls.filter(poll => poll.public || poll.ownerId === currentUserId);
-
-    return filteredPolls.map((poll) => (
-      <Summary
-        ballotsCount={ballotCountsByPollId[poll._id] || 0}
-        key={poll._id}
-        poll={poll}
-        ownedByCurrentUser={poll.ownerId === currentUserId}
-        setVotingPollId={this.setVotingPollId}
-        setViewingResultsPollId={this.setViewingResultsPollId}
-      />
-    ));
-  }
-
-  render() {
-    return (
+  return (
+    <Router>
       <div className="container">
-        {this.state.votingPollId && (
-          <BallotForm
-            poll={this.props.polls.find(poll => poll._id === this.state.votingPollId)}
-            onBack={() => this.setVotingPollId(null)}
-          />
-        )}
-        {this.state.viewingResultsPollId && (
-          <Results
-            ballots={this.props.ballots.filter(ballot => ballot.pollId === this.state.viewingResultsPollId)}
-            poll={this.props.polls.find(poll => poll._id === this.state.viewingResultsPollId)}
-            onBack={() => this.setViewingResultsPollId(null)}
-          />
-        )}
-        {!this.state.votingPollId && !this.state.viewingResultsPollId && (
-          <Fragment>
-            <header>
-              <h1>Polls ({this.props.myPollsCount})</h1>
+        <Switch>
+          <Route path="/polls/:pollId/vote" exact render={(routeProps) => (
+            <BallotForm
+              {...routeProps}
+              poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
+              pollsReady={pollsReady}
+              onBack={() => setVotingPollId(null)}
+            />
+          )} />
+          <Route path="/polls/:pollId/results" exact render={(routeProps) => (
+            <Results
+              {...routeProps}
+              ballots={ballots.filter(ballot => ballot.pollId === routeProps.match.params.pollId)}
+              poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
+              onBack={() => setViewingResultsPollId(null)}
+            />
+          )} />
+          <Route path="/polls" exact render={(routeProps) => (
+            <Fragment>
+              <header>
+                <h1>Polls ({myPollsCount})</h1>
 
-              <label className="hide-not-mine">
-                <input
-                  type="checkbox"
-                  readOnly
-                  checked={this.state.hideNotMine}
-                  onClick={this.toggleHideNotMine}
+                <label className="hide-not-mine">
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={hideNotMine}
+                    onClick={() => setHideNotMine(!hideNotMine)}
+                  />
+                  Show only my polls
+                </label>
+
+                <AccountsUIWrapper />
+
+                { currentUser ?
+                  <PollForm onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}/> : ''
+                }
+              </header>
+
+              <ul>
+                <Polls
+                  ballots={ballots}
+                  currentUser={currentUser}
+                  hideNotMine={hideNotMine}
+                  polls={polls}
+                  setViewingResultsPollId={setViewingResultsPollId}
+                  setVotingPollId={setVotingPollId}
                 />
-                Show only my polls
-              </label>
+              </ul>
+            </Fragment>
+          )} />
+        <Route path="/">
+            {votingPollId && (
+              <BallotForm
+                poll={polls.find(poll => poll._id === votingPollId)}
+                onBack={() => setVotingPollId(null)}
+              />
+            )}
 
-              <AccountsUIWrapper />
+            {viewingResultsPollId && (
+              <Results
+                ballots={ballots.filter(ballot => ballot.pollId === viewingResultsPollId)}
+                poll={polls.find(poll => poll._id === viewingResultsPollId)}
+                onBack={() => setViewingResultsPollId(null)}
+              />
+            )}
 
-              { this.props.currentUser ?
-                <PollForm onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}/> : ''
-              }
-            </header>
+            {!votingPollId && !viewingResultsPollId && (
+              <Fragment>
+                <header>
+                  <h1>Polls ({myPollsCount})</h1>
 
-            <ul>
-              {this.renderPolls()}
-            </ul>
-          </Fragment>
-        )
-        }
+                  <label className="hide-not-mine">
+                    <input
+                      type="checkbox"
+                      readOnly
+                      checked={hideNotMine}
+                      onClick={() => setHideNotMine(!hideNotMine)}
+                    />
+                    Show only my polls
+                  </label>
+
+                  <AccountsUIWrapper />
+
+                  { currentUser ?
+                    <PollForm onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}/> : ''
+                  }
+                </header>
+
+                <ul>
+                  <Polls
+                    ballots={ballots}
+                    currentUser={currentUser}
+                    hideNotMine={hideNotMine}
+                    polls={polls}
+                    setViewingResultsPollId={setViewingResultsPollId}
+                    setVotingPollId={setVotingPollId}
+                  />
+                </ul>
+              </Fragment>
+            )}
+          </Route>
+        </Switch>
       </div>
-    );
-  }
+    </Router>
+  );
 }
 
 export default withTracker(() => {
-  Meteor.subscribe('ballots');
-  Meteor.subscribe('polls');
+  const ballotsHandler = Meteor.subscribe('ballots');
+  const pollsHandler = Meteor.subscribe('polls');
 
   const currentUser = Meteor.user();
   return {
-    ballots: Ballots.find({}, { sort: { createdAt: -1 } }).fetch(),
-    polls: Polls.find({}, { sort: { createdAt: -1 } }).fetch(),
-    myPollsCount: Polls.find({ ownerId: currentUser && currentUser._id },).count(),
+    ballotsHandler,
+    ballots: BallotsApi.find({}, { sort: { createdAt: -1 } }).fetch(),
+    ballotsReady: ballotsHandler.ready(),
+    polls: PollsApi.find({}, { sort: { createdAt: -1 } }).fetch(),
+    pollsReady: pollsHandler.ready(),
+    myPollsCount: PollsApi.find({ ownerId: currentUser && currentUser._id },).count(),
     currentUser,
   };
 })(App);
