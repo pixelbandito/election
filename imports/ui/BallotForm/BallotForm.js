@@ -1,6 +1,10 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link, Redirect } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { useDrag, useDrop } from 'react-dnd'
+
 /*
 export const defaultBallot = {
   candidateIdRanks: [],
@@ -12,7 +16,90 @@ export const defaultBallot = {
 };
 */
 
-// TODO: Candidates disappear on refresh!
+const DraggableBallotForm = (props) => (
+  <DndProvider backend={HTML5Backend}><BallotForm {...props} /></DndProvider>
+);
+
+const ItemTypes = {
+  CANDIDATE: 'candidate',
+};
+
+const Candidate = ({
+  candidate,
+  max,
+  min,
+  onChangeCandidateRankInput,
+  onKeyDownCandidateRank,
+  onKeyUpCandidateRank,
+  value,
+}) => (
+  <div>
+    <label htmlFor={`candidateRankInput--${candidate.id}`}>
+      Candidate rank
+      <br/>
+      <strong>
+        {candidate.name}
+      </strong>
+    </label>
+    <input
+      id={`candidateRankInput--${candidate.id}`}
+      max={max}
+      min={min}
+      onChange={onChangeCandidateRankInput}
+      onKeyDown={onKeyDownCandidateRank}
+      onKeyUp={onKeyUpCandidateRank}
+      step="1"
+      type="number"
+      value={value}
+    />
+  </div>
+);
+
+const DraggableCandidate = ({
+  className,
+  onHoverCandidate,
+  index,
+  onMoveCandidate,
+  style,
+  ...passedProps
+}) => {
+  const ref = useRef(null)
+
+  const { candidate } = passedProps;
+
+  const [, drop] = useDrop({
+    accept: ItemTypes.CANDIDATE,
+    drop(item, monitor) {
+      const dragIndex = item.index;
+      const dropIndex = index;
+
+      if (dragIndex === dropIndex) {
+        return;
+      }
+
+      onMoveCandidate(dragIndex, dropIndex);
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: ItemTypes.CANDIDATE, id: candidate.id, index },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+  return (
+    <li
+      ref={ref}
+    >
+      <Candidate
+        {...passedProps}
+      />
+  </li>
+  );
+};
+
 const BallotForm = ({
   pollsReady,
   poll,
@@ -74,7 +161,7 @@ const BallotForm = ({
   }
 
   changeCandidateIdRank = ({ candidateId, nextRank }) => {
-    if (nextRank) {
+    if (typeof nextRank === 'number') {
       const { candidateIdRanks: prevCandidateIdRanks } = ballotForm;
       const nextCandidateIdRanks = [...prevCandidateIdRanks];
       nextCandidateIdRanks.splice(prevCandidateIdRanks.indexOf(candidateId), 1);
@@ -109,15 +196,13 @@ const BallotForm = ({
   const onKeyUpCandidateRank = (candidateId, index) => event => {
     const { candidateIdRanks } = ballotForm;
     const prevRank = index;
-    let nextRank;
+    let nextRank = `${prevRank}`;
 
     if (event.key === 'ArrowUp') {
       setArrowingUp(false);
 
       if (prevRank > 0) {
         nextRank = `${Math.max(prevRank - 1, 0)}`;
-      } else {
-        nextRank = `${prevRank}`;
       }
     }
 
@@ -126,16 +211,18 @@ const BallotForm = ({
 
       if (prevRank < candidateIdRanks.length - 1) {
         nextRank = `${Math.min(prevRank + 1, candidateIdRanks.length - 1)}`;
-      } else {
-        nextRank = `${prevRank}`;
       }
     }
 
-
-    if (nextRank) {
-      changeCandidateIdRank({ candidateId, nextRank })
-    }
+    changeCandidateIdRank({ candidateId, nextRank })
   }
+
+  const onMoveCandidate = (dragIndex, dropIndex) => {
+    const { candidateIdRanks } = ballotForm;
+    const candidateId = candidateIdRanks[dragIndex];
+    const nextRank = dropIndex;
+    changeCandidateIdRank({ candidateId, nextRank });
+  };
 
   handleSubmitBallot = async (event) => {
     event.preventDefault();
@@ -195,27 +282,41 @@ const BallotForm = ({
                 }
 
                 return (
-                  <li key={candidate.id}>
-                    <label htmlFor={`candidateRankInput--${candidate.id}`}>
-                      Candidate rank
-                      <br/>
-                      <strong>
-                        {candidate.name}
-                      </strong>
-                    </label>
-                    <input
-                      id={`candidateRankInput--${candidate.id}`}
-                      min={min}
-                      max={max}
-                      step="1"
-                      type="number"
-                      value={index + 1}
-                      onChange={onChangeCandidateRankInput(candidate.id)}
-                      onKeyUp={onKeyUpCandidateRank(candidate.id, index)}
-                      onKeyDown={onKeyDownCandidateRank}
-                    />
-                  </li>
+                  <DraggableCandidate
+                    key={candidate.id}
+                    candidate={candidate}
+                    index={index}
+                    max={max}
+                    min={min}
+                    onChangeCandidateRankInput={onChangeCandidateRankInput(candidate.id)}
+                    onKeyDownCandidateRank={onKeyDownCandidateRank}
+                    onKeyUpCandidateRank={onKeyUpCandidateRank(candidate.id, index)}
+                    onMoveCandidate={onMoveCandidate}
+                    value={index + 1}
+                  />
                 );
+                /*
+                <li key={candidate.id}>
+                  <label htmlFor={`candidateRankInput--${candidate.id}`}>
+                    Candidate rank
+                    <br/>
+                    <strong>
+                      {candidate.name}
+                    </strong>
+                  </label>
+                  <input
+                    id={`candidateRankInput--${candidate.id}`}
+                    min={min}
+                    max={max}
+                    step="1"
+                    type="number"
+                    value={index + 1}
+                    onChange={onChangeCandidateRankInput(candidate.id)}
+                    onKeyUp={onKeyUpCandidateRank(candidate.id, index)}
+                    onKeyDown={onKeyDownCandidateRank}
+                  />
+                </li>
+                */
               })}
             </ul>
           </section>
@@ -228,4 +329,4 @@ const BallotForm = ({
   );
 };
 
-export default BallotForm;
+export default DraggableBallotForm;
