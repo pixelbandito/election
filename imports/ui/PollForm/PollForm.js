@@ -1,6 +1,8 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, Fragment, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { Link, Redirect } from 'react-router-dom';
 
+import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import CandidateForm from '../CandidateForm';
 
 {/*
@@ -14,16 +16,36 @@ import CandidateForm from '../CandidateForm';
 */}
 
 const PollForm = ({
+  currentUser,
   initPollForm,
   onBack,
   onSubmit,
 }) => {
+  // When editing is complere, this controls the Redirect component
+  const [goHome, setGoHome] = useState(false);
+
   const [pollForm, setPollForm] = useState(initPollForm || {
     candidates: [],
     enabled: false,
     public: false,
     name: '',
   });
+
+  /*
+    When polls are loaded after the component, e.g. when the user goes straight
+    to this page via URL, update the ballot form.
+  */
+  useEffect(() => {
+    console.log('useEffect');
+    if (initPollForm) {
+      setPollForm(initPollForm || {
+        candidates: [],
+        enabled: false,
+        public: false,
+        name: '',
+      });
+    }
+  }, [initPollForm]);
 
   const [resetDate, setResetDate] = useState(new Date().toISOString())
 
@@ -92,61 +114,80 @@ const PollForm = ({
       candidates: [],
     });
 
-    setResetDate(new Date().toISOString())
+    setResetDate(new Date().toISOString());
+
+
+    if (onBack) {
+      onBack();
+    } else {
+      setGoHome(true);
+    }
   };
 
   return (
     <form onSubmit={handleSubmitPoll}>
+      {goHome && <Redirect to='/polls' />}
       <section>
-        <button type="button" onClick={onBack}>x</button>
+        {onBack && <button type="button" onClick={onBack}>x</button>}
+        {!onBack && <Link to="/polls">←</Link>}
       </section>
-      <section>
-        <label htmlFor={`${pollForm._id || ''}-createPoll__name`}>Name</label>
-        <input
-          id={`${pollForm._id || ''}-createPoll__name`}
-          value={pollForm.name}
-          type="text"
-          onChange={handleChangeName}
-          ref={nameInputRef}
-          placeholder="Type to add poll name"
-        />
-      </section>
-      <section>
-        <label>Candidates</label>
-        <CandidateForm
-          key={resetDate}
-          onSetCandidates={handleSetCandidates}
-          candidates={pollForm.candidates}
-          poll={pollForm}
-        />
-      </section>
-      <section>
-        <label htmlFor={`${pollForm._id || ''}-createPoll__enable`}>
-          <input
-            id={`${pollForm._id || ''}-createPoll__enable`}
-            onChange={handleChangeEnabled}
-            ref={enabledInputRef}
-            type="checkbox"
-            checked={pollForm.enabled}
-          />
-          Enabled
-        </label>
-      </section>
-      <section>
-        <label htmlFor={`${pollForm._id || ''}-createPoll__public`}>
-          <input
-            id={`${pollForm._id || ''}-createPoll__public`}
-            onChange={handleChangePublic}
-            ref={publicInputRef}
-            type="checkbox"
-            checked={pollForm.public}
-          />
-          Public
-        </label>
-      </section>
-      <section>
-        <button type="submit">Submit</button>
-      </section>
+      {!currentUser && (
+        <div>
+          <div>Log in or create an account to make your own poll</div>
+          <AccountsUIWrapper />
+        </div>
+      )}
+      {currentUser && (
+        <Fragment>
+          <section>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__name`}>Name</label>
+            <input
+              id={`${pollForm._id || ''}-createPoll__name`}
+              value={pollForm.name}
+              type="text"
+              onChange={handleChangeName}
+              ref={nameInputRef}
+              placeholder="Type to add poll name"
+            />
+          </section>
+          <section>
+            <label>Candidates</label>
+            <CandidateForm
+              key={resetDate}
+              onSetCandidates={handleSetCandidates}
+              candidates={pollForm.candidates}
+              poll={pollForm}
+            />
+          </section>
+          <section>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__enable`}>
+              <input
+                id={`${pollForm._id || ''}-createPoll__enable`}
+                onChange={handleChangeEnabled}
+                ref={enabledInputRef}
+                type="checkbox"
+                checked={pollForm.enabled}
+              />
+              Enabled
+            </label>
+          </section>
+          <section>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__public`}>
+              <input
+                id={`${pollForm._id || ''}-createPoll__public`}
+                onChange={handleChangePublic}
+                ref={publicInputRef}
+                type="checkbox"
+                checked={pollForm.public}
+              />
+              Public
+            </label>
+          </section>
+          <section>
+            <button type="submit">Submit</button>
+          </section>
+        </Fragment>
+      )}
     </form>
   );
 }

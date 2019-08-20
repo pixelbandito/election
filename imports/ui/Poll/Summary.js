@@ -34,6 +34,14 @@ const Summary = ({
     disabled: !poll.enabled,
   });
 
+  const handleClickDelete = (event) => {
+    const confirmed = confirm('Are you sure you want to delete this poll?');
+
+    if (confirmed) {
+      Meteor.call('polls.remove', poll._id);
+    }
+  };
+
   return (
     <li className={pollClassName}>
       {!isEditing && (
@@ -58,10 +66,10 @@ const Summary = ({
           }
           {ownedByCurrentUser ? (
             <Fragment>
-              <button type="button" onClick={() => setIsEditing(true)}>
+              <Link to={`/polls/${poll._id}/edit`}>
                 Edit
-              </button>
-              <button type="button" onClick={() => Meteor.call('polls.remove', poll._id)}>
+              </Link>
+              <button type="button" onClick={handleClickDelete}>
                 &times;
               </button>
             </Fragment>

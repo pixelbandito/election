@@ -19,6 +19,10 @@ const BallotForm = ({
 }) => {
   // When the ballot is cast, this controls the Redirect component
   const [goHome, setGoHome] = useState(false);
+  const [arrowingDown, setArrowingDown] = useState(false);
+  const [arrowingUp, setArrowingUp] = useState(false);
+  const [max, setMax] = useState(1);
+  const min = 1;
 
   // Shuffle candidates for fairer voting
   const shuffledCandidateIds = useMemo(() => {
@@ -47,6 +51,8 @@ const BallotForm = ({
         submitted: false,
         voterName: '',
       });
+
+      setMax(shuffledCandidateIds.length);
     }
   }, [poll, shuffledCandidateIds]);
 
@@ -67,11 +73,9 @@ const BallotForm = ({
     });
   }
 
-  onChangeCandidateRankInput = candidateId => event => {
-    const { candidateIdRanks: prevCandidateIdRanks } = ballotForm;
-    const nextRank = event.target.value;
-
+  changeCandidateIdRank = ({ candidateId, nextRank }) => {
     if (nextRank) {
+      const { candidateIdRanks: prevCandidateIdRanks } = ballotForm;
       const nextCandidateIdRanks = [...prevCandidateIdRanks];
       nextCandidateIdRanks.splice(prevCandidateIdRanks.indexOf(candidateId), 1);
       nextCandidateIdRanks.splice(nextRank, 0, candidateId);
@@ -79,6 +83,57 @@ const BallotForm = ({
         ...ballotForm,
         candidateIdRanks: nextCandidateIdRanks,
       });
+    }
+  }
+
+  onChangeCandidateRankInput = candidateId => event => {
+    const { candidateIdRanks: prevCandidateIdRanks } = ballotForm;
+    const nextRank = event.target.value;
+
+    if (!arrowingUp && !arrowingDown) {
+      changeCandidateIdRank({ candidateId, nextRank });
+    }
+  }
+
+  const onKeyDownCandidateRank = event => {
+    switch(event.key) {
+      case 'ArrowUp':
+        setArrowingUp(true);
+      case 'ArrowDown':
+        setArrowingDown(true);
+      default:
+        break;
+    }
+  }
+
+  const onKeyUpCandidateRank = (candidateId, index) => event => {
+    const { candidateIdRanks } = ballotForm;
+    const prevRank = index;
+    let nextRank;
+
+    if (event.key === 'ArrowUp') {
+      setArrowingUp(false);
+
+      if (prevRank > 0) {
+        nextRank = `${Math.max(prevRank - 1, 0)}`;
+      } else {
+        nextRank = `${prevRank}`;
+      }
+    }
+
+    if (event.key === 'ArrowDown') {
+      setArrowingDown(false);
+
+      if (prevRank < candidateIdRanks.length - 1) {
+        nextRank = `${Math.min(prevRank + 1, candidateIdRanks.length - 1)}`;
+      } else {
+        nextRank = `${prevRank}`;
+      }
+    }
+
+
+    if (nextRank) {
+      changeCandidateIdRank({ candidateId, nextRank })
     }
   }
 
@@ -132,7 +187,7 @@ const BallotForm = ({
         </section>
         <section>
             <ul>
-              {ballotForm.candidateIdRanks.map((candidateId, i) => {
+              {ballotForm.candidateIdRanks.map((candidateId, index) => {
                 const candidate = candidates.find(candidate => candidate.id === candidateId);
 
                 if (!candidate) {
@@ -150,12 +205,14 @@ const BallotForm = ({
                     </label>
                     <input
                       id={`candidateRankInput--${candidate.id}`}
-                      min="0"
-                      max={candidates.length - 1}
+                      min={min}
+                      max={max}
                       step="1"
                       type="number"
-                      value={i}
+                      value={index + 1}
                       onChange={onChangeCandidateRankInput(candidate.id)}
+                      onKeyUp={onKeyUpCandidateRank(candidate.id, index)}
+                      onKeyDown={onKeyDownCandidateRank}
                     />
                   </li>
                 );

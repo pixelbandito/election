@@ -43,6 +43,21 @@ const App = ({
               poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
             />
           )} />
+          <Route path="/polls/:pollId/edit" exact render={(routeProps) => (
+            <PollForm
+              {...routeProps}
+              currentUser={currentUser}
+              initPollForm={polls.find(poll => poll._id === routeProps.match.params.pollId)}
+              onSubmit={(pollForm) => Meteor.call('polls.set', pollForm)}
+            />
+          )} />
+          <Route path="/polls/create" exact render={(routeProps) => (
+            <PollForm
+              {...routeProps}
+              currentUser={currentUser}
+              onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}
+            />
+          )} />
           <Route path="/polls" exact render={(routeProps) => (
             <Fragment>
               <header>
@@ -58,11 +73,9 @@ const App = ({
                   Show only my polls
                 </label>
 
-                <AccountsUIWrapper />
+                <Link to="/polls/create">Create a poll</Link>
 
-                { currentUser ?
-                  <PollForm onSubmit={(pollForm) => Meteor.call('polls.insert', pollForm)}/> : ''
-                }
+                <AccountsUIWrapper />
               </header>
 
               <ul>
@@ -91,9 +104,9 @@ export default withTracker(() => {
   const currentUser = Meteor.user();
   return {
     ballotsHandler,
-    ballots: BallotsApi.find({}, { sort: { createdAt: -1 } }).fetch(),
+    ballots: BallotsApi.find({}, { sort: { dateUpdated: -1 } }).fetch(),
     ballotsReady: ballotsHandler.ready(),
-    polls: PollsApi.find({}, { sort: { createdAt: -1 } }).fetch(),
+    polls: PollsApi.find({}, { sort: { dateUpdated: -1 } }).fetch(),
     pollsReady: pollsHandler.ready(),
     myPollsCount: PollsApi.find({ ownerId: currentUser && currentUser._id },).count(),
     currentUser,
