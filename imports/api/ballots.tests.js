@@ -13,12 +13,15 @@ if (Meteor.isServer) {
       const userId = Random.id();
       let ballotId;
       let pollId;
+      let beforeBallotCount;
 
       beforeEach(() => {
         Polls.remove({});
         Ballots.remove({});
 
         pollId = Polls.insert({
+          multivote: false,
+          anonymous: true,
           candidates: [],
           dateCreated: 8,
           dateUpdated: 42,
@@ -28,13 +31,28 @@ if (Meteor.isServer) {
         });
 
         ballotId = Ballots.insert({
+          ballotVoucherUuid: '',
           candidateIdRanks: [],
           dateCreated: 8,
           dateUpdated: 42,
           pollId,
           submitted: true,
           ownerId: userId,
+          voterName: '',
         });
+
+        ballotId = Ballots.insert({
+          ballotVoucherUuid: 'biff',
+          candidateIdRanks: [],
+          dateCreated: 3,
+          dateUpdated: 7,
+          pollId,
+          submitted: true,
+          ownerId: '',
+          voterName: '',
+        });
+
+        beforeBallotCount = Ballots.find().count();
       });
 
       afterEach(() => {
@@ -48,28 +66,43 @@ if (Meteor.isServer) {
         const creatableBallot = {
           candidateIdRanks: [],
           submitted: true,
+          voterName: '',
         };
 
         it('works', () => {
           const invocation = { userId };
           insertBallot.apply(invocation, [{ ...creatableBallot, pollId }]);
 
-          assert.equal(Ballots.find().count(), 2);
+          assert.equal(Ballots.find().count(), beforeBallotCount + 1);
         });
 
-        it('fails with no user', () => {
+        it('fails with no user and no ballotVoucherUuid', () => {
           const invocation = { userId: null };
 
           assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId }]));
 
-          assert.equal(Ballots.find().count(), 1);
+          assert.equal(Ballots.find().count(), beforeBallotCount);
+        });
+
+        it('works with no user and a ballotVoucherUuid', () => {
+          const invocation = { userId: null };
+          insertBallot.apply(invocation, [{ ...creatableBallot, pollId, ballotVoucherUuid: 'foo' }])
+
+          assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+        });
+
+        it('works with a user and no ballotVoucherUuid', () => {
+          const invocation = { userId };
+          insertBallot.apply(invocation, [{ ...creatableBallot, pollId }])
+
+          assert.equal(Ballots.find().count(), beforeBallotCount + 1);
         });
 
         it('fails with no pollId', () => {
           const invocation = { userId };
 
           assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId: undefined }]));
-          assert.equal(Ballots.find().count(), 1);
+          assert.equal(Ballots.find().count(), beforeBallotCount);
         });
 
         it('fails with a disabled pollId', () => {
@@ -85,7 +118,7 @@ if (Meteor.isServer) {
           });
 
           assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId: disabledPollId }]));
-          assert.equal(Ballots.find().count(), 1);
+          assert.equal(Ballots.find().count(), beforeBallotCount);
 
           Polls.remove(disabledPollId);
         });
@@ -98,7 +131,24 @@ if (Meteor.isServer) {
             _id: pollId,
           }]));
 
-          assert.equal(Ballots.find().count(), 1);
+          assert.equal(Ballots.find().count(), beforeBallotCount);
+        });
+
+        // it('fails if the user has already voted in the poll', () => {
+        //   const invocation = { userId };
+        //
+        //   assert.throws(() => insertBallot.apply(invocation, [{
+        //     ...creatableBallot,
+        //     _id: pollId,
+        //   }]));
+        //
+        //   assert.equal(Ballots.find().count(), beforeBallotCount);
+        // });
+
+        it('fails if the ballotVoucherUuid was already used in the poll', () => {
+          const invocation = { userId: null };
+          assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId: disabledPollId }]));
+          assert.equal(Ballots.find().count(), beforeBallotCount);
         });
       });
     });

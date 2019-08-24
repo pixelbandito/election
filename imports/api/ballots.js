@@ -36,6 +36,7 @@ export default {
 */
 
 export const creatableBallotType = {
+  ballotVoucherUuid: Match.Maybe(String),
   candidateIdRanks: [String],
   dateCreated: Match.Maybe(Number),
   dateUpdated: Match.Maybe(Number),
@@ -51,6 +52,7 @@ export const ballotType = {
 };
 
 export const defaults = {
+  ballotVoucherUuid: '',
   candidateIdRanks: [],
   dateCreated: new Date(0).valueOf(),
   dateUpdated: new Date(0).valueOf(),
@@ -85,7 +87,7 @@ Meteor.methods({
     check(ballot, creatableBallotType);
 
     // Make sure the user is logged in before inserting a ballot
-    if (!this.userId) {
+    if (!this.userId && !ballot.ballotVoucherUuid) {
       throw new Meteor.Error('not-authorized');
     }
 
@@ -105,7 +107,7 @@ Meteor.methods({
 
     Ballots.insert({
       ...generateBallot(ballot),
-      ownerId: this.userId,
+      ownerId: (!ballot.ballotVoucherUuid && this.userId) || null,
     });
   },
   'ballots.set'(ballot) {

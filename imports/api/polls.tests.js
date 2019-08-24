@@ -18,6 +18,8 @@ if (Meteor.isServer) {
         Polls.remove({});
 
         pollId = Polls.insert({
+          multivote: false,
+          anonymous: true,
           candidates: [],
           dateCreated: 8,
           dateUpdated: 42,
@@ -36,6 +38,8 @@ if (Meteor.isServer) {
         const insertPoll = Meteor.server.method_handlers['polls.insert'];
 
         const creatablePoll = {
+          multivote: false,
+          anonymous: false,
           candidates: [],
           enabled: false,
           public: false,
@@ -77,6 +81,8 @@ if (Meteor.isServer) {
 
           insertPoll.apply(invocation, [{
             ...prevPoll,
+            multivote: true,
+            anonymous: false,
             candidates: [{
               id: 'pat',
               name: 'Pat',
@@ -90,18 +96,12 @@ if (Meteor.isServer) {
 
           assert.equal(Polls.find().count(), 1);
 
-          const matchingProps = {
-            candidates: prevPoll.candidates,
-            dateCreated: prevPoll.dateCreated,
-            enabled: prevPoll.enabled,
-            public: prevPoll.public,
-            _id: prevPoll._id,
-            name: prevPoll.name,
-            ownerId: prevPoll.ownerId,
-          };
-
           expect(nextPoll).to.deep.include({
-            ...matchingProps,
+            // Should mostly be like the original poll.
+            ...prevPoll,
+            // With these explicit changes
+            multivote: true,
+            anonymous: false,
             candidates: [{
               id: 'pat',
               name: 'Pat',
@@ -109,6 +109,8 @@ if (Meteor.isServer) {
             enabled: false,
             public: false,
             name: 'Poll Bar',
+            // And these implicit changes
+            dateUpdated: nextPoll.dateUpdated,
           });
 
           expect(nextPoll.dateUpdated).to.be.above(prevPoll.dateUpdated);

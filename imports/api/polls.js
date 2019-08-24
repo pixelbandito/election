@@ -10,6 +10,8 @@ export const embeddableCandidateType = {
 };
 
 export const creatablePollType = {
+  multivote: Boolean, // Allows one use to vote multiple times. Recommended only for development
+  anonymous: Boolean,
   candidates: [Match.ObjectIncluding({ ...embeddableCandidateType })],
   dateCreated: Match.Maybe(Number),
   dateUpdated: Match.Maybe(Number),
@@ -25,6 +27,8 @@ export const pollType = {
 };
 
 export const defaults = {
+  multivote: false,
+  anonymous: false,
   candidates: [],
   dateCreated: new Date(0).valueOf(),
   dateUpdated: new Date(0).valueOf(),

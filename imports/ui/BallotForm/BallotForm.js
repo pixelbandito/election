@@ -1,8 +1,9 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { Fragment, useMemo, useEffect, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import qs from 'qs';
 
 import Candidate from './Candidate';
 
@@ -22,6 +23,8 @@ const DraggableBallotForm = (props) => (
 );
 
 const BallotForm = ({
+  currentUser,
+  location,
   pollsReady,
   poll,
 }) => {
@@ -32,8 +35,8 @@ const BallotForm = ({
   const [max, setMax] = useState(1);
   const min = 1;
 
+  const [ballotVoucherUuid, setBallotVoucherUuid] = useState('');
   const [candidateIdRanks, setCandidateIdRanks] = useState([]);
-
   const [voterName, setVoterName] = useState('');
 
   // Shuffle candidates for fairer voting
@@ -49,17 +52,27 @@ const BallotForm = ({
   }
 
   useEffect(() => {
+    setBallotVoucherUuid(qs.parse(location.search, { ignoreQueryPrefix: true }).voucher);
+  }, []);
+
+  useEffect(() => {
     if (poll && shuffledCandidateIds) {
       setCandidateIdRanks2(shuffledCandidateIds);
       setMax(shuffledCandidateIds.length);
     }
   }, [poll, shuffledCandidateIds]);
 
+  useEffect(() => {
+    if (currentUser && poll && poll.anonymous && !ballotVoucherUuid) {
+      setVoterName(currentUser.username);
+    }
+  }, [currentUser, poll && poll.anonymous, ballotVoucherUuid])
+
+  console.log({ pollsReady });
+
   if (!poll) {
     return (
-      <div>
-        Loading...
-      </div>
+      <div>Loading...</div>
     );
   }
 
@@ -135,6 +148,7 @@ const BallotForm = ({
     event.preventDefault();
 
     const result = await Meteor.call('ballots.insert', {
+      ballotVoucherUuid,
       candidateIdRanks,
       voterName,
       pollId: poll._id,
@@ -158,6 +172,36 @@ const BallotForm = ({
   }
 
   const { candidates } = poll;
+  const votingEnabled = currentUser || (poll.anonymous && ballotVoucherUuid);
+
+  // Default to the can't vote state
+  let message = (
+    <Fragment>
+      <p>Sorry, you can't vote in this poll</p>
+      <Link to="/polls">Browse other polls</Link>
+    </Fragment>
+  );
+
+  if (votingEnabled) {
+    if (ballotVoucherUuid) {
+      if (currentUser) {
+        // User has a choice of how to vote
+        message = (
+          <Fragment>
+            <p>You're logged in, but using an anonymous ballot. If you type a name on your ballot, it will still be visible.</p>
+            <p>Would you like to discard your anonymous ballot and vote as yourself instead? (Recommended only if you want your vote to be completely public.)</p>
+            <a href={`/polls/${poll._id}/vote`}>Vote publicly</a>
+          </Fragment>
+        );
+      } else {
+        // Anonymous user, can only vote because they have a ballotVoucherUuid
+        message = <p>You're voting anonymously. If you type a name on the ballot, it will still be visible.</p>;
+      }
+    } else {
+      // Logged-in voter
+      message = <p>You're voting publicly. Your username and vote will be linked and visible with the results.</p>;
+    }
+  }
 
   return (
     <div>
@@ -167,6 +211,9 @@ const BallotForm = ({
       </section>
       <section>
         <h1>{poll.name}</h1>
+        <div>
+          {message}
+        </div>
       </section>
       <form onSubmit={handleSubmitBallot}>
         <section>
@@ -178,6 +225,7 @@ const BallotForm = ({
             type="text"
             onChange={handleVoterChangeNameInput}
             value={voterName}
+            disabled={currentUser && poll.anonymous && !ballotVoucherUuid ? true : undefined}
           />
         </section>
         <section>
@@ -203,28 +251,6 @@ const BallotForm = ({
                     value={index + 1}
                   />
                 );
-                /*
-                <li key={candidate.id}>
-                  <label htmlFor={`candidateRankInput--${candidate.id}`}>
-                    Candidate rank
-                    <br/>
-                    <strong>
-                      {candidate.name}
-                    </strong>
-                  </label>
-                  <input
-                    id={`candidateRankInput--${candidate.id}`}
-                    min={min}
-                    max={max}
-                    step="1"
-                    type="number"
-                    value={index + 1}
-                    onChange={onChangeCandidateRankInput(candidate.id)}
-                    onKeyUp={onKeyUpCandidateRank(candidate.id, index)}
-                    onKeyDown={onKeyDownCandidateRank}
-                  />
-                </li>
-                */
               })}
             </ul>
           </section>

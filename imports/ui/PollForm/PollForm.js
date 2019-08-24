@@ -5,16 +5,6 @@ import { Link, Redirect } from 'react-router-dom';
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import CandidateForm from '../CandidateForm';
 
-{/*
-  candidates: [],
-  dateCreated: new Date(0).valueOf(),
-  dateUpdated: new Date(0).valueOf(),
-  enabled: false,
-  public: false,
-  name: '',
-  ownerId: '',
-*/}
-
 const PollForm = ({
   currentUser,
   initPollForm,
@@ -25,6 +15,8 @@ const PollForm = ({
   const [goHome, setGoHome] = useState(false);
 
   const [pollForm, setPollForm] = useState(initPollForm || {
+    multivote: false,
+    anonymous: false,
     candidates: [],
     enabled: false,
     public: false,
@@ -36,9 +28,10 @@ const PollForm = ({
     to this page via URL, update the ballot form.
   */
   useEffect(() => {
-    console.log('useEffect');
     if (initPollForm) {
       setPollForm(initPollForm || {
+        multivote: false,
+        anonymous: false,
         candidates: [],
         enabled: false,
         public: false,
@@ -49,15 +42,31 @@ const PollForm = ({
 
   const [resetDate, setResetDate] = useState(new Date().toISOString())
 
-  const nameInputRef = createRef();
+  const multivoteInputRef = createRef();
+  const anonymousInputRef = createRef();
   const enabledInputRef = createRef();
+  const nameInputRef = createRef();
   const publicInputRef = createRef();
 
   useEffect(() => {
-    nameInputRef.value = pollForm.name;
+    multivoteInputRef.checked = pollForm.multivote;
+  }, [multivoteInputRef.current]);
+
+  useEffect(() => {
+    anonymousInputRef.checked = pollForm.anonymous;
+  }, [anonymousInputRef.current]);
+
+  useEffect(() => {
     enabledInputRef.checked = pollForm.enabled;
+  }, [enabledInputRef.current]);
+
+  useEffect(() => {
+    nameInputRef.value = pollForm.name;
+  }, [nameInputRef.current]);
+
+  useEffect(() => {
     publicInputRef.checked = pollForm.public;
-  }, [nameInputRef.current, enabledInputRef.current, publicInputRef.current]);
+  }, [publicInputRef.current]);
 
   const handleSetCandidates = (nextCandidates) => {
     setPollForm({
@@ -84,6 +93,24 @@ const PollForm = ({
     });
   };
 
+  const handleChangeMultivote = (event) => {
+    const multivote = event.target.checked;
+
+    setPollForm({
+      ...pollForm,
+      multivote,
+    });
+  };
+
+  const handleChangeAnonymous = (event) => {
+    const anonymous = event.target.checked;
+
+    setPollForm({
+      ...pollForm,
+      anonymous,
+    });
+  };
+
   const handleChangePublic = (event) => {
     const public = event.target.checked;
 
@@ -96,11 +123,13 @@ const PollForm = ({
   const handleSubmitPoll = (event) => {
     event.preventDefault();
 
+    const multivoteInput = multivoteInputRef.current;
+    const anonymousInput = anonymousInputRef.current;
     const nameInput = nameInputRef.current;
     const enabledInput = enabledInputRef.current;
     const publicInput = publicInputRef.current;
 
-    if (!pollForm.name || !nameInput || !enabledInput || !publicInput) {
+    if (!pollForm.name || !nameInput || !enabledInput || !publicInput || !anonymousInput || !multivoteInput) {
       return;
     }
 
@@ -108,6 +137,8 @@ const PollForm = ({
 
     // Clear form
     setPollForm({
+      multivote: false,
+      anonymous: false,
       name: '',
       enabled: false,
       public: false,
@@ -184,9 +215,38 @@ const PollForm = ({
             </label>
           </section>
           <section>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__anonymous`}>
+              <input
+                id={`${pollForm._id || ''}-createPoll__anonymous`}
+                onChange={handleChangeAnonymous}
+                ref={anonymousInputRef}
+                type="checkbox"
+                checked={pollForm.anonymous}
+              />
+              Anonymous
+            </label>
+          </section>
+          <section>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__multivote`}>
+              <input
+                id={`${pollForm._id || ''}-createPoll__multivote`}
+                onChange={handleChangeMultivote}
+                ref={multivoteInputRef}
+                type="checkbox"
+                checked={pollForm.multivote}
+              />
+              Multivote
+            </label>
+          </section>
+          <section>
             <button type="submit">Submit</button>
           </section>
         </Fragment>
+      )}
+      {pollForm._id && pollForm.anonymous && (
+        <div>
+          <Link to={`/polls/${pollForm._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
+        </div>
       )}
     </form>
   );

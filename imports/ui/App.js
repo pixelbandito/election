@@ -10,6 +10,7 @@ import Polls from './Polls';
 import BallotForm from './BallotForm';
 import PollForm from './PollForm';
 import Results from './Results';
+import BallotVouchers from './BallotVouchers';
 
 import AccountsUIWrapper from './AccountsUIWrapper.js';
 
@@ -32,6 +33,7 @@ const App = ({
           <Route path="/polls/:pollId/vote" exact render={(routeProps) => (
             <BallotForm
               {...routeProps}
+              currentUser={currentUser}
               poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
               pollsReady={pollsReady}
             />
@@ -49,6 +51,14 @@ const App = ({
               currentUser={currentUser}
               initPollForm={polls.find(poll => poll._id === routeProps.match.params.pollId)}
               onSubmit={(pollForm) => Meteor.call('polls.set', pollForm)}
+            />
+          )} />
+          <Route path="/polls/:pollId/ballot-vouchers" exact render={(routeProps) => (
+            <BallotVouchers
+              {...routeProps}
+              ballots={ballots.filter(ballot => ballot.pollId === routeProps.match.params.pollId)}
+              currentUser={currentUser}
+              poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
             />
           )} />
           <Route path="/polls/create" exact render={(routeProps) => (
