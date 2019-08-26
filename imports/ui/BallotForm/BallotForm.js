@@ -102,6 +102,22 @@ const BallotForm = ({
     }
   }
 
+  const onClickCandidateRankUp = (candidateId, index) => event => {
+    const prevRank = index;
+    const nextRank = Math.max(prevRank - 1, 0);
+    if (nextRank || nextRank === 0) {
+      changeCandidateIdRank({ candidateId, nextRank })
+    }
+  };
+
+  const onClickCandidateRankDown = (candidateId, index) => event => {
+    const prevRank = index;
+    const nextRank = Math.min(prevRank + 1, candidateIdRanks.length - 1);
+    if (nextRank || nextRank === 0) {
+      changeCandidateIdRank({ candidateId, nextRank })
+    }
+  };
+
   const onKeyDownCandidateRank = event => {
     switch(event.key) {
       case 'ArrowUp':
@@ -239,12 +255,14 @@ const BallotForm = ({
 
                 return (
                   <Candidate
-                    key={candidate.id}
                     candidate={candidate}
                     index={index}
+                    key={candidate.id}
                     max={max}
                     min={min}
                     onChangeCandidateRankInput={onChangeCandidateRankInput(candidate.id)}
+                    onClickCandidateRankDown={onClickCandidateRankDown(candidate.id, index)}
+                    onClickCandidateRankUp={onClickCandidateRankUp(candidate.id, index)}
                     onKeyDownCandidateRank={onKeyDownCandidateRank}
                     onKeyUpCandidateRank={onKeyUpCandidateRank(candidate.id, index)}
                     onMoveCandidate={onMoveCandidate}

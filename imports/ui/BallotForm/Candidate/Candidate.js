@@ -10,6 +10,8 @@ export const Candidate = React.forwardRef(({
   max,
   min,
   onChangeCandidateRankInput,
+  onClickCandidateRankDown,
+  onClickCandidateRankUp,
   onKeyDownCandidateRank,
   onKeyUpCandidateRank,
   value,
@@ -33,6 +35,18 @@ export const Candidate = React.forwardRef(({
       type="number"
       value={value}
     />
+  <button
+    onClick={onClickCandidateRankUp}
+    type="button"
+  >
+    ↑
+  </button>
+  <button
+    onClick={onClickCandidateRankDown}
+    type="button"
+  >
+    ↓
+  </button>
 </li>
 ));
 
