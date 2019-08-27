@@ -118,7 +118,7 @@ export default withTracker(() => {
     ballotsReady: ballotsHandler.ready(),
     polls: PollsApi.find({}, { sort: { dateUpdated: -1 } }).fetch(),
     pollsReady: pollsHandler.ready(),
-    myPollsCount: PollsApi.find({ ownerId: currentUser && currentUser._id },).count(),
+    myPollsCount: PollsApi.find({ ownerId: currentUser && currentUser._id }).count(),
     currentUser,
   };
 })(App);

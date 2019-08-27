@@ -91,7 +91,8 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    const prevBallot = (ballot._id && Ballots.findOne(ballot._id)) || null;
+    // prevBallot, 1st definition: A pre-existing ballot with the same ID
+    let prevBallot = (ballot._id && Ballots.findOne(ballot._id)) || null;
 
     // Make sure the ballot doesn't already exist
     if (prevBallot) {
@@ -103,6 +104,24 @@ Meteor.methods({
 
     if (!poll || !poll.enabled) {
       throw new Meteor.Error('invalid-request');
+    }
+
+    // TODO: Make sure this user or ballot voucher hasn't voted in this poll, unless multivote is on
+    // prevBallot, 2nd definition: A pre-existing ballot on the same poll cast by the same person
+    if (!poll.multivote) {
+      prevBallot = undefined;
+
+      if (ballot.ballotVoucherUuid) {
+        prevBallot = Ballots.findOne({ ballotVoucherUuid: ballot.ballotVoucherUuid });
+      } else {
+        prevBallot = Ballots.findOne({ ownerId: this.userId });
+      }
+
+      console.log({ 'poll.multivote': poll.multivote, prevBallot });
+
+      if (prevBallot) {
+        throw new Meteor.Error('this person already voted');
+      }
     }
 
     Ballots.insert({

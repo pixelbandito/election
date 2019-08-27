@@ -1,8 +1,11 @@
 import React, { Fragment, useMemo, useEffect, useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link, Redirect, withRouter } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+// import TouchBackend from 'react-dnd-touch-backend'
+// import MultiBackend from 'react-dnd-multi-backend';
+// import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch';
 import qs from 'qs';
 
 import Candidate from './Candidate';
@@ -17,6 +20,8 @@ export const defaultBallot = {
   voterName: ''
 };
 */
+
+// const DraggableBallotForm = DragDropContext(MultiBackend(HTML5toTouch))(BallotForm);
 
 const DraggableBallotForm = (props) => (
   <DndProvider backend={HTML5Backend}><BallotForm {...props} /></DndProvider>

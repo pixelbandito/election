@@ -37,7 +37,7 @@ if (Meteor.isServer) {
           dateUpdated: 42,
           pollId,
           submitted: true,
-          ownerId: userId,
+          ownerId: Random.id(),
           voterName: '',
         });
 
@@ -80,22 +80,88 @@ if (Meteor.isServer) {
           const invocation = { userId: null };
 
           assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId }]));
-
           assert.equal(Ballots.find().count(), beforeBallotCount);
         });
 
-        it('works with no user and a ballotVoucherUuid', () => {
-          const invocation = { userId: null };
-          insertBallot.apply(invocation, [{ ...creatableBallot, pollId, ballotVoucherUuid: 'foo' }])
+        describe('with a ballotVoucherUuid', () => {
+          it('works with no user', () => {
+            const invocation = { userId: null };
+            insertBallot.apply(invocation, [{ ...creatableBallot, pollId, ballotVoucherUuid: 'foo' }])
 
-          assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+            assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+          });
+
+          describe('and the ballotVoucherUuid has already been used', () => {
+            it('fails without multivote', () => {
+              const invocation = { userId: null };
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId, ballotVoucherUuid: 'foo' }]);
+              assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+
+              assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId, ballotVoucherUuid: 'foo' }]));
+
+              assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+            });
+
+            it('passes with multivote (FOR DEV ONLY)', () => {
+              const multivotePollId = Polls.insert({
+                multivote: true,
+                anonymous: true,
+                candidates: [],
+                dateCreated: 8,
+                dateUpdated: 42,
+                enabled: true,
+                name: 'Poll Foo',
+                ownerId: userId,
+              });
+
+              const invocation = { userId: null };
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId: multivotePollId, ballotVoucherUuid: 'foo' }]);
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId: multivotePollId, ballotVoucherUuid: 'foo' }])
+
+              assert.equal(Ballots.find().count(), beforeBallotCount + 2);
+            });
+          });
         });
 
-        it('works with a user and no ballotVoucherUuid', () => {
-          const invocation = { userId };
-          insertBallot.apply(invocation, [{ ...creatableBallot, pollId }])
+        describe('with a user', () => {
+          it('works with no ballotVoucherUuid', () => {
+            const invocation = { userId };
+            insertBallot.apply(invocation, [{ ...creatableBallot, pollId }])
 
-          assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+            assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+          });
+
+          describe('and the user has already voted', () => {
+            it('fails without multivote', () => {
+              const invocation = { userId };
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId }]);
+
+              assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+
+              assert.throws(() => insertBallot.apply(invocation, [{ ...creatableBallot, pollId }]));
+
+              assert.equal(Ballots.find().count(), beforeBallotCount + 1);
+            });
+
+            it('passes with multivote (FOR DEV ONLY)', () => {
+              const multivotePollId = Polls.insert({
+                multivote: true,
+                anonymous: true,
+                candidates: [],
+                dateCreated: 8,
+                dateUpdated: 42,
+                enabled: true,
+                name: 'Poll Foo',
+                ownerId: userId,
+              });
+
+              const invocation = { userId };
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId: multivotePollId }]);
+              insertBallot.apply(invocation, [{ ...creatableBallot, pollId: multivotePollId }])
+
+              assert.equal(Ballots.find().count(), beforeBallotCount + 2)
+            });
+          });
         });
 
         it('fails with no pollId', () => {
