@@ -35,11 +35,8 @@ const calculateResults = ({
   const winnerIds = candidateIds.filter(cId => votes[cId] && votes[cId] > winningThreshold);
 
   if (winnerIds.length) {
-    console.log('We have some winners!', { winnerIds });
     return { winnerIds };
   } else {
-    console.log('No winner yet...');
-
     let leastVotesReceived = candidateIds.reduce((result, cId) => {
       const candidateVotes = votes[cId] || 0;
       result = typeof result === 'number' ? result : candidateVotes;
@@ -54,16 +51,12 @@ const calculateResults = ({
 
     // TODO: Need a tie-breaking strategy
     if (loserIds.length) {
-      console.log('We have some losers!', { loserIds });
-
       // Remove losers and go again.
       const nextCandidates = candidates.filter(candidate => loserIds.indexOf(candidate.id) < 0);
       nextBallotsArray = nextBallotsArray.map(prevBallot => ({
         ...prevBallot,
         candidateIdRanks: prevBallot.candidateIdRanks.filter(cId => loserIds.indexOf(cId) < 0),
       }));
-
-      console.log({ nextCandidates, nextBallotsArray });
 
       try {
         return calculateResults({

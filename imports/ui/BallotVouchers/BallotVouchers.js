@@ -110,12 +110,8 @@ poll={polls.find(poll => poll._id === routeProps.match.params.pollId)}
 */
 
 export default withTracker(({ poll }) => {
-  console.log({ poll });
   const ballotVouchersHandler = Meteor.subscribe('ballotVouchers', (poll && poll._id) || 'foo');
-
   const currentUser = Meteor.user();
-
-  console.log(ballotVouchersHandler);
 
   return {
     ballotVouchersHandler,

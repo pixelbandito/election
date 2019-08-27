@@ -30,8 +30,6 @@ const BallotForm = ({
 }) => {
   // When the ballot is cast, this controls the Redirect component
   const [goHome, setGoHome] = useState(false);
-  const [arrowingDown, setArrowingDown] = useState(false);
-  const [arrowingUp, setArrowingUp] = useState(false);
   const [max, setMax] = useState(1);
   const min = 1;
 
@@ -46,18 +44,13 @@ const BallotForm = ({
     return shuffledCandidates.map(candidate => candidate.id);
   }, [poll && poll.candidates, pollsReady]);
 
-  const setCandidateIdRanks2 = (ids) => {
-    console.log('setCandidateIdRanks2', ids);
-    setCandidateIdRanks(ids);
-  }
-
   useEffect(() => {
     setBallotVoucherUuid(qs.parse(location.search, { ignoreQueryPrefix: true }).voucher);
   }, []);
 
   useEffect(() => {
     if (poll && shuffledCandidateIds) {
-      setCandidateIdRanks2(shuffledCandidateIds);
+      setCandidateIdRanks(shuffledCandidateIds);
       setMax(shuffledCandidateIds.length);
     }
   }, [poll, shuffledCandidateIds]);
@@ -67,8 +60,6 @@ const BallotForm = ({
       setVoterName(currentUser.username);
     }
   }, [currentUser, poll && poll.anonymous, ballotVoucherUuid])
-
-  console.log({ pollsReady });
 
   if (!poll) {
     return (
@@ -83,78 +74,21 @@ const BallotForm = ({
   }
 
   const changeCandidateIdRank = ({ candidateId, nextRank }) => {
-    console.log('changeCandidateIdRank', { name: poll.candidates.find(c => c.id === candidateId).name, nextRank });
     if (nextRank || nextRank === 0) {
       const prevCandidateIdRanks = candidateIdRanks;
       const nextCandidateIdRanks = [...prevCandidateIdRanks];
       nextCandidateIdRanks.splice(prevCandidateIdRanks.indexOf(candidateId), 1);
       nextCandidateIdRanks.splice(nextRank, 0, candidateId);
-      setCandidateIdRanks2(nextCandidateIdRanks);
+      setCandidateIdRanks(nextCandidateIdRanks);
     }
   }
 
-  const onChangeCandidateRankInput = candidateId => event => {
+  const onChangeCandidateRankInput = candidateId => nextValue => {
     const prevCandidateIdRanks = candidateIdRanks;
-    const nextRank = parseInt(event.target.value, 10) - 1;
-
-    if (!arrowingUp && !arrowingDown) {
-      changeCandidateIdRank({ candidateId, nextRank });
-    }
-  }
-
-  const onClickCandidateRankUp = (candidateId, index) => event => {
-    const prevRank = index;
-    const nextRank = Math.max(prevRank - 1, 0);
-    if (nextRank || nextRank === 0) {
-      changeCandidateIdRank({ candidateId, nextRank })
-    }
-  };
-
-  const onClickCandidateRankDown = (candidateId, index) => event => {
-    const prevRank = index;
-    const nextRank = Math.min(prevRank + 1, candidateIdRanks.length - 1);
-    if (nextRank || nextRank === 0) {
-      changeCandidateIdRank({ candidateId, nextRank })
-    }
-  };
-
-  const onKeyDownCandidateRank = event => {
-    switch(event.key) {
-      case 'ArrowUp':
-        setArrowingUp(true);
-        break;
-      case 'ArrowDown':
-        setArrowingDown(true);
-        break;
-      default:
-        break;
-    }
-  }
-
-  const onKeyUpCandidateRank = (candidateId, index) => event => {
-    const prevRank = index;
-    let nextRank;
-
-    switch(event.key) {
-      case 'ArrowUp':
-        setArrowingUp(false);
-        nextRank = Math.max(prevRank - 1, 0);
-        break;
-      case 'ArrowDown':
-        setArrowingDown(false);
-        nextRank = Math.min(prevRank + 1, candidateIdRanks.length - 1);
-        break;
-      default:
-        break;
-    }
-
-    if (nextRank || nextRank === 0) {
-      changeCandidateIdRank({ candidateId, nextRank })
-    }
+    changeCandidateIdRank({ candidateId, nextRank: nextValue - 1 }); // Candidate form uses 1-indexed rankings
   }
 
   const onMoveCandidate = (dragIndex, dropIndex) => {
-    console.log('onMoveCandidate');
     const candidateId = candidateIdRanks[dragIndex];
     const nextRank = dropIndex;
     changeCandidateIdRank({ candidateId, nextRank });
@@ -261,10 +195,6 @@ const BallotForm = ({
                     max={max}
                     min={min}
                     onChangeCandidateRankInput={onChangeCandidateRankInput(candidate.id)}
-                    onClickCandidateRankDown={onClickCandidateRankDown(candidate.id, index)}
-                    onClickCandidateRankUp={onClickCandidateRankUp(candidate.id, index)}
-                    onKeyDownCandidateRank={onKeyDownCandidateRank}
-                    onKeyUpCandidateRank={onKeyUpCandidateRank(candidate.id, index)}
                     onMoveCandidate={onMoveCandidate}
                     value={index + 1}
                   />
