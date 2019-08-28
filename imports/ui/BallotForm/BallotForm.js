@@ -74,7 +74,6 @@ const BallotForm = ({
 
   const handleVoterChangeNameInput = event => {
     const nextVoterName = event.target.value || voterName;
-
     setVoterName(nextVoterName);
   }
 
@@ -103,7 +102,7 @@ const BallotForm = ({
     event.preventDefault();
 
     const result = await Meteor.call('ballots.insert', {
-      ballotVoucherUuid,
+      ballotVoucherUuid: ballotVoucherUuid || '',
       candidateIdRanks,
       voterName,
       pollId: poll._id,
