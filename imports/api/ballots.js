@@ -4,6 +4,7 @@ import { check, Match } from 'meteor/check';
 import shortid from 'shortid';
 
 import { Polls } from './polls.js';
+import { BallotVouchers } from './ballotVouchers.js';
 
 export const Ballots = new Mongo.Collection('ballots');
 
@@ -106,18 +107,25 @@ Meteor.methods({
       throw new Meteor.Error('invalid-request');
     }
 
-    // TODO: Make sure this user or ballot voucher hasn't voted in this poll, unless multivote is on
+    // Make sure the ballot voucher is real and attached to the same poll as the ballot
+    if (ballot.ballotVoucherUuid) {
+      const ballotVoucher = BallotVouchers.findOne({ ballotVoucherUuid: ballot.ballotVoucherUuid });
+
+      if (!ballotVoucher || ballotVoucher.pollId !== poll._id) {
+        throw new Meteor.Error('invalid-request');
+      }
+    }
+
+    // Make sure this user or ballot voucher hasn't voted in this poll, unless multivote is on
     // prevBallot, 2nd definition: A pre-existing ballot on the same poll cast by the same person
     if (!poll.multivote) {
       prevBallot = undefined;
 
       if (ballot.ballotVoucherUuid) {
-        prevBallot = Ballots.findOne({ ballotVoucherUuid: ballot.ballotVoucherUuid });
+        prevBallot = Ballots.findOne({ pollId: poll._id, ballotVoucherUuid: ballot.ballotVoucherUuid });
       } else {
-        prevBallot = Ballots.findOne({ ownerId: this.userId });
+        prevBallot = Ballots.findOne({ pollId: poll._id, ownerId: this.userId });
       }
-
-      console.log({ 'poll.multivote': poll.multivote, prevBallot });
 
       if (prevBallot) {
         throw new Meteor.Error('this person already voted');

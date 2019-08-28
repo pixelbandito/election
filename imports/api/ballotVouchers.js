@@ -8,6 +8,7 @@ import { Polls } from './polls.js';
 export const BallotVouchers = new Mongo.Collection('ballotVouchers');
 
 export const creatableBallotVoucherType = {
+  ballotVoucherUuid: Match.Maybe(String),
   dateCreated: Match.Maybe(Number),
   dateUpdated: Match.Maybe(Number),
   pollId: String,
@@ -59,9 +60,9 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    // Make sure the ballotVoucher doesn't already exist
     const prevBallotVoucher = (ballotVoucher._id && BallotVouchers.findOne(ballotVoucher._id)) || null;
 
-    // Make sure the ballotVoucher doesn't already exist
     if (prevBallotVoucher) {
       throw new Meteor.Error('invalid-request');
     }
