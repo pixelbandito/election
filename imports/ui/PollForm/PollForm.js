@@ -40,7 +40,15 @@ const PollForm = ({
     }
   }, [initPollForm]);
 
-  const [resetDate, setResetDate] = useState(new Date().toISOString())
+  useMemo
+
+  const [resetDate, setResetDate] = useState(new Date().toISOString());
+
+  /*
+    WARN: Is we start rendering this component before currentUser is available,
+    you could get false positives here
+  */
+  const ownedByCurrentUser = pollForm.ownerId === (currentUser || {})._id);
 
   const multivoteInputRef = createRef();
   const anonymousInputRef = createRef();
@@ -155,9 +163,17 @@ const PollForm = ({
     }
   };
 
+  const handleClickDelete = (event) => {
+    const confirmed = confirm('Are you sure you want to delete this poll?');
+
+    if (confirmed) {
+      Meteor.call('polls.remove', poll._id);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmitPoll}>
-      {goHome && <Redirect to='/polls' />}
+      {(goHome || (pollForm && pollForm._id && !ownedByCurrentUser)) && <Redirect to='/polls' />}
       <section>
         {onBack && <button type="button" onClick={onBack}>x</button>}
         {!onBack && <Link to="/polls">←</Link>}
@@ -239,11 +255,22 @@ const PollForm = ({
             </label>
           </section>
           <section>
+            {pollForm._id && ownedByCurrentUser && (
+              <div style={{ float: 'right' }}>
+                <button
+                  onClick={handleClickDelete}
+                  style={{ color: 'red' }}
+                  type="button"
+                >
+                  🗑 Delete
+                </button>
+              </div>
+            )}
             <button type="submit">Submit</button>
           </section>
         </Fragment>
       )}
-      {pollForm._id && pollForm.anonymous && (
+      {pollForm._id && pollForm.anonymous && ownedByCurrentUser && (
         <div>
           <Link to={`/polls/${pollForm._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
         </div>
