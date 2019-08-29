@@ -63,6 +63,7 @@ mongo@1.7.0-beta182.13
 mongo-decimal@0.1.1
 mongo-dev-server@1.1.0
 mongo-id@1.0.7
+nathantreid:css-modules@4.1.0
 npm-bcrypt@0.9.3
 npm-mongo@3.2.0-beta182.13
 observe-sequence@1.0.16

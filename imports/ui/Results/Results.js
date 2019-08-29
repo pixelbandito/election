@@ -81,6 +81,7 @@ const calculateResults = ({
 
 const Results = ({
   ballots,
+  currentUser,
   match,
   poll,
 }) => {
@@ -119,6 +120,12 @@ const Results = ({
     }
   }
 
+  /*
+    WARN: Is we start rendering this component before currentUser is available,
+    you could get false positives here
+  */
+  const ownedByCurrentUser = poll.ownerId === (currentUser || {})._id;
+
   return (
     <div>
       <section>
@@ -139,6 +146,13 @@ const Results = ({
           </ul>
         )}
       </section>
+      {poll._id && poll.anonymous && ownedByCurrentUser && (
+        <section>
+          <div>
+            <Link to={`/polls/${poll._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
+          </div>
+        </section>
+      )}
       <section>
         <button onClick={handleClickCalculateWinners}>Calculate winners!</button>
         {!!winnerIds.length && (

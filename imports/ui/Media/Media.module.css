@@ -1,0 +1,15 @@
+.Media {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.Item {
+  flex: 0 0 auto;
+}
+
+.Body {
+  flex: 1 1 auto;
+  min-width: 0;
+}

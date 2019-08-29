@@ -1,0 +1,44 @@
+.Button {
+  background-color: #eee;
+  border: 1px solid #eee;
+  border-radius: 0;
+  -webkit-button-appearance: none;
+  color: blue;
+  display: inline-block;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 16px;
+  padding: 5px 10px;
+}
+
+.Button:hover:not(:disabled) {
+  background-color: #ccc;
+}
+
+.Button:focus:not(:disabled) {
+  border-color: blue;
+  outline-color: blue;
+  position: relative;
+  z-index: 1;
+}
+
+.Button:disabled,
+.disabled:not(:disabled) {
+  color: #666666;
+}
+
+.Link {
+  text-decoration: none;
+}
+
+.Link:active {
+  color: black;
+}
+
+.Link:visited:not(:focus):not(:active) {
+  color: blue;
+}
+
+.clear {
+  background-color: transparent;
+  border-color: transparent;
+}

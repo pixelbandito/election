@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,900&display=swap');
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+:global(html) {
+  margin: 0;
+  padding: 0;
+}
+
+:global(body) {
+  background: gray;
+  margin: 0;
+  padding: 0;
+}
+
+:global(ul),
+:global(li) {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.irs {
+  background: white;
+  border: 1px solid black;
+  box-sizing: border-box;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+  margin: 40px auto;
+  max-width: 768px;
+  padding: 20px;
+  width: 90vw;
+}
+
+.friendly {
+  background: white;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  margin: 40px auto;
+  max-width: 768px;
+  padding: 20px;
+  width: 90vw;
+}

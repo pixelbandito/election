@@ -1,0 +1,16 @@
+.PageHeader {
+  background: pink;
+}
+
+.irs .title {
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  font-weight: 900;
+}
+
+.friendly .title {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: lighter;
+  font-size: 40px;
+}

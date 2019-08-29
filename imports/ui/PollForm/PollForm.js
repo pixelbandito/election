@@ -40,15 +40,13 @@ const PollForm = ({
     }
   }, [initPollForm]);
 
-  useMemo
-
   const [resetDate, setResetDate] = useState(new Date().toISOString());
 
   /*
     WARN: Is we start rendering this component before currentUser is available,
     you could get false positives here
   */
-  const ownedByCurrentUser = pollForm.ownerId === (currentUser || {})._id);
+  const ownedByCurrentUser = pollForm.ownerId === (currentUser || {})._id;
 
   const multivoteInputRef = createRef();
   const anonymousInputRef = createRef();

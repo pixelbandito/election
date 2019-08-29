@@ -25,6 +25,7 @@ const Polls = ({
   return filteredPolls.map((poll) => (
     <Summary
       ballotsCount={ballotCountsByPollId[poll._id] || 0}
+      currentUser={currentUser}
       key={poll._id}
       poll={poll}
       ownedByCurrentUser={poll.ownerId === currentUserId}
