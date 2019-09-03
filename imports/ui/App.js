@@ -1,7 +1,8 @@
-import React, { Component, Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import classNames from 'classnames';
 
 import { Polls as PollsApi } from '../api/polls.js';
 import { Ballots as BallotsApi } from '../api/ballots.js';
@@ -32,7 +33,13 @@ const App = ({
   return (
     <ThemeContext.Provider value={themeKey} >
       <Router>
-        <div className={style.App, style[themeKey]}>
+        <div className={classNames(style.App, style[themeKey])}>
+          <PageHeader
+            myPollsCount={myPollsCount}
+            hideNotMine={hideNotMine}
+            setHideNotMine={setHideNotMine}
+            setThemeKey={setThemeKey}
+          />
           <Switch>
             <Route path="/polls/:pollId/vote" exact render={(routeProps) => (
               <BallotForm
@@ -74,23 +81,14 @@ const App = ({
               />
             )} />
             <Route path="/polls" exact render={(routeProps) => (
-              <Fragment>
-                <PageHeader
-                  myPollsCount={myPollsCount}
+              <ul className={style.pollsList}>
+                <Polls
+                  ballots={ballots}
+                  currentUser={currentUser}
                   hideNotMine={hideNotMine}
-                  setHideNotMine={setHideNotMine}
-                  setThemeKey={setThemeKey}
+                  polls={polls}
                 />
-
-                <ul className={style.pollsList}>
-                  <Polls
-                    ballots={ballots}
-                    currentUser={currentUser}
-                    hideNotMine={hideNotMine}
-                    polls={polls}
-                  />
-                </ul>
-              </Fragment>
+              </ul>
             )} />
             <Route>
               <Redirect to="/polls" />

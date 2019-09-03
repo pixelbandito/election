@@ -43,3 +43,9 @@ body :global {
   padding: 20px;
   width: 90vw;
 }
+
+/* CSSLint disable */
+:global :root {
+  --pink: pink;
+}
+/* CSSLint disable */

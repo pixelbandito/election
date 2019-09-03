@@ -1,23 +1,37 @@
 import React from 'react';
 import classNames from 'classnames';
+import { Route, Switch } from 'react-router-dom';
 
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import { themeKeys } from '../ThemeContext';
 import WithThemeKey from '../WithThemeKey';
 import { LinkButton } from '../Button';
+import BackLink from '../BackLink';
 
 import styles from './PageHeader.module.css';
 
 const PageHeader = ({
   myPollsCount,
   hideNotMine,
+  location,
   setHideNotMine,
   setThemeKey,
   themeKey,
 }) => (
   <header className={classNames(styles.PageHeader, styles[themeKey])}>
     <div className={styles.header}>
-      <h1 className={styles.title}>Polls <span className={styles.pollCount}>({myPollsCount})</span></h1>
+      <h1 className={styles.title}>
+        <Switch>
+          <Route path="/polls" exact />
+          <Route>
+            <span className={styles.homeLink}>
+              <BackLink />
+            </span>
+          </Route>
+        </Switch>
+        Polls
+        <span className={styles.pollCount}>({myPollsCount})</span>
+      </h1>
     </div>
     <div className={styles.actions}>
       <div className={classNames(styles.action, styles.account)}>

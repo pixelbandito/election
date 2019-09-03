@@ -2,6 +2,7 @@
   align-items: stretch;
   display: flex;
   flex-flow: column nowrap;
+  background: var(--pink) !important;
 }
 
 .irs .header {
@@ -97,6 +98,7 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   background: #F1F4FF;
+  border-radius: 0;
   border-width: 0;
   flex: 1 1 auto;
   padding: 5px;

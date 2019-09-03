@@ -1,7 +1,8 @@
 {
   "ignore": [
-    "known-properties",
     "box-model",
-    "box-sizing"
+    "box-sizing",
+    "empty-rules",
+    "known-properties"
   ]
 }

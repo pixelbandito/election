@@ -7,6 +7,14 @@
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
+  "cssModules": {
+    "postcssPlugins": {
+      "postcss-custom-properties": {},
+      "postcss-modules-local-by-default": {},
+      "postcss-modules-extract-imports": {},
+      "postcss-modules-scope": {}
+    }
+  },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "classnames": "^2.2.6",
