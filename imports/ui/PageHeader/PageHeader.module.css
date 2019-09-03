@@ -1,16 +1,107 @@
-.PageHeader {
-  background: pink;
-}
+@media (min-width: 768px) {
+  .irs {
+    align-items: stretch;
+    display: flex;
+    flex-flow: row nowrap;
+  }
 
-.irs .title {
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
-  font-size: 28px;
-  letter-spacing: -0.5px;
-  font-weight: 900;
-}
+  .irs .header {
+    align-self: flex-end;
+    flex: 0 0 auto;
+    padding: 5px;
+  }
 
-.friendly .title {
-  font-family: 'Helvetica Neue', Helvetica, sans-serif;
-  font-weight: lighter;
-  font-size: 40px;
+  .irs .title {
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  .irs .pollCount {
+    font-size: 14px;
+    font-weight: normal;
+    margin-inline-start: 10px;
+  }
+
+  .irs .actions {
+    align-items: stretch;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row wrap;
+    min-width: 0;
+    padding: 2px;
+  }
+
+  .irs .action {
+    border-inline-start: 1px solid black;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column nowrap;
+    min-width: 0;
+    padding: 5px;
+    width: 33.333%;
+  }
+
+  .irs .account {
+    align-items: center;
+    background-color: #E9FFEC;
+    border-block-end: 1px solid black;
+    border-inline-start-width: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    order: 1;
+    width: 100%;
+  }
+
+  .irs .create {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    order: 3;
+    padding: 0;
+  }
+
+  .irs .createButton {
+    align-items: center;
+    display: flex;
+  }
+
+  .irs .filter {
+    align-items: center;
+    background: #E9FFEC;
+    border-inline-start-width: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    font-weight: bold;
+    order: 2;
+  }
+
+  .irs .theme {
+    display: flex;
+    flex-flow: column nowrap;
+    order: 4;
+    padding: 0;
+  }
+
+  .irs .themeLabel {
+    flex: 1 1 auto;
+    padding: 5px;
+  }
+
+  .irs .themeSelect {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: #F1F4FF;
+    border-width: 0;
+    flex: 1 1 auto;
+    padding: 5px;
+  }
+
+  .friendly .title {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: lighter;
+  }
 }

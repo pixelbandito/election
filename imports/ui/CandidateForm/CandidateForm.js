@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import shortid from 'shortid';
 
+import Button from '../Button';
+
 /*
   {
     id: String,
@@ -66,6 +68,13 @@ const CandidateForm = ({
     return addCandidate();
   }
 
+  const handleKeyUpNewCandidateName = event => {
+    console.log(event.key);
+    if (event.key === 'Enter') {
+      submitAddCandidateForm(event);
+    }
+  }
+
   const addCandidate = () => {
     if (getAddCandidateDisabled()) {
       return;
@@ -95,21 +104,17 @@ const CandidateForm = ({
             type="text"
             value={newCandidateName}
             onChange={event => setNewCandidateName(event.target.value)}
+            onKeyUp={handleKeyUpNewCandidateName}
           />
-          <button
+        <Button
             disabled={getAddCandidateDisabled()}
             onClick={submitAddCandidateForm}
-            type="button"
           >
             Add candidate
-          </button>
+          </Button>
       </li>
     </ul>
-  )
-  return [
-    ...currentCandidates,
-    this.renderNewCandidateForm()
-  ];
+  );
 };
 
 export default CandidateForm;

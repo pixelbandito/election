@@ -5,6 +5,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 
 import { Polls as PollsApi } from '../../api/polls.js';
 import { BallotVouchers as BallotVouchersApi } from '../../api/ballotVouchers';
+import Button from '../Button';
 
 const min = 1;
 const max = 100;
@@ -66,7 +67,7 @@ const BallotVouchers = ({
           />
         </section>
         <section>
-          <button type="submit">Create vouchers</button>
+          <Button type="submit">Create vouchers</Button>
         </section>
       </form>
       <pre>

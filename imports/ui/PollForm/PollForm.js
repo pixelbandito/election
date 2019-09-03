@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import CandidateForm from '../CandidateForm';
+import Button from '../Button';
 
 const PollForm = ({
   currentUser,
@@ -173,7 +174,7 @@ const PollForm = ({
     <form onSubmit={handleSubmitPoll}>
       {(goHome || (pollForm && pollForm._id && !ownedByCurrentUser)) && <Redirect to='/polls' />}
       <section>
-        {onBack && <button type="button" onClick={onBack}>x</button>}
+        {onBack && <Button onClick={onBack}>x</Button>}
         {!onBack && <Link to="/polls">←</Link>}
       </section>
       {!currentUser && (
@@ -255,16 +256,15 @@ const PollForm = ({
           <section>
             {pollForm._id && ownedByCurrentUser && (
               <div style={{ float: 'right' }}>
-                <button
+                <Button
                   onClick={handleClickDelete}
                   style={{ color: 'red' }}
-                  type="button"
                 >
                   🗑 Delete
-                </button>
+                </Button>
               </div>
             )}
-            <button type="submit">Submit</button>
+            <Button type="submit">Submit</Button>
           </section>
         </Fragment>
       )}

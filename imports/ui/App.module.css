@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:400,900&display=swap');
 
-:global(*) {
+* :global {
   box-sizing: border-box;
 }
 
-:global(html) {
+html :global {
   margin: 0;
   padding: 0;
 }
 
-:global(body) {
+body :global {
   background: gray;
   margin: 0;
   padding: 0;

@@ -1,0 +1,57 @@
+.irs {
+  align-items: stretch;
+  background: #E9FFEC;
+  border-block-end: 1px solid black;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.irs:last-child {
+  border-block-end-width: 0;
+}
+
+.irs .Candidate:last-child {
+  border-block-end-width: 0;
+}
+
+.irs .candidateInfo {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 10px;
+}
+
+.irs .rank {
+  background: #F1F4FF;
+  border: 1px solid black;
+  flex: 0 0 auto;
+  font-size: 18px;
+  margin-right: 20px;
+  order: 1;
+  padding: 5px;
+  text-align: center;
+}
+
+.irs .name {
+  align-self: center;
+  flex: 1 1 auto;
+  font-family: "Times New Roman", Georgia, serif;
+  order: 2;
+}
+
+.irs .actions {
+  align-items: strech;
+  border-inline-start: 1px solid black;
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: column nowrap;
+}
+
+.irs .actions > * {
+  border-block-end: 1px solid black;
+  flex: 1 1 auto;
+}
+
+.irs .actions > :last-child {
+  border-block-end-width: 0;
+}

@@ -1,6 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+
+import { LinkButton } from '../Button';
+import buttonStyle from '../Button/Button.module.css';
 
 const BackLink = (props) => (
-  <Link {...props} to={props.to || '/polls'}>←</Link>
+  <LinkButton
+    {...props} 
+    className={classNames(props.className, buttonStyle.clear)}
+    to={props.to || '/polls'}>
+    ⌂
+  </LinkButton>
 );
+
+export default BackLink;

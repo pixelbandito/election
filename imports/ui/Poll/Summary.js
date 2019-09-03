@@ -1,10 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import React, { Component, Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
 import classNames from 'classnames';
 
 // Local imports, by proximity
-import { Polls } from '../../api/polls.js';
 import { LinkButton } from '../Button';
 import buttonStyle from '../Button/Button.module.css';
 import Media from '../Media';

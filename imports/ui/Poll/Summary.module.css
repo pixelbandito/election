@@ -14,7 +14,7 @@
 }
 
 .irs .title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 900;
   letter-spacing: -0.5px;
   margin-inline-end: 10px;
@@ -119,7 +119,6 @@
 
   .irs .actions {
     border-block-start-width: 0;
-    border-inline-start: 1px solid #000000C0;
     display: grid;
     flex: 0 0 130px;
     grid-template-columns: 100%;
@@ -132,6 +131,9 @@
   }
 
   .irs .action {
+    border-block-start: 1px solid #000000;
+    border-inline-end-width: 0;
+    border-inline-start: 1px solid #000000;
     order: 2;
   }
 

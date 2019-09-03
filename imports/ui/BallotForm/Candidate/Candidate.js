@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import classNames from 'classnames';
+
+import Button from '../../Button';
+import WithThemeKey from '../../WithThemeKey';
+import styles from './Candidate.module.css';
 
 const ItemTypes = {
   CANDIDATE: 'candidate',
@@ -11,6 +16,7 @@ export const Candidate = React.forwardRef(({
   min,
   onChangeCandidateRankInput,
   value,
+  themeKey,
 }, ref) => {
   const [candidateRankInputValue, setCandidateRankInputValue] = useState(value);
   const [arrowingDown, setArrowingDown] = useState(false);
@@ -93,41 +99,47 @@ export const Candidate = React.forwardRef(({
   };
 
   return (
-    <li ref={ref}>
-      <label htmlFor={`candidateRankInput--${candidate.id}`}>
-        Candidate rank
-        <br/>
-        <strong>
+    <li className={classNames(styles.Candidate, styles[themeKey])} ref={ref}>
+      <div className={styles.candidateInfo}>
+        <label
+          aria-label="Candidate name"
+          className={styles.name}
+          htmlFor={`candidateRankInput--${candidate.id}`}
+        >
           {candidate.name}
-        </strong>
-      </label>
-      <input
-        id={`candidateRankInput--${candidate.id}`}
-        inputMode="numeric"
-        max={max}
-        min={min}
-        onChange={onChange}
-        onKeyDown={onKeyDownCandidateRank}
-        onKeyUp={onKeyUpCandidateRank}
-        pattern="[0-9]*"
-        placeholder={candidateRankInputValue || value}
-        step="1"
-        type="number"
-        value={candidateRankInputValue}
-      />
-    <button
-      onClick={onClickCandidateRankUp}
-      type="button"
-    >
-      ↑
-    </button>
-    <button
-      onClick={onClickCandidateRankDown}
-      type="button"
-    >
-      ↓
-    </button>
-  </li>
+        </label>
+        <input
+          className={styles.rank}
+          aria-label="Candidate rank"
+          id={`candidateRankInput--${candidate.id}`}
+          inputMode="numeric"
+          max={max}
+          min={min}
+          onChange={onChange}
+          onKeyDown={onKeyDownCandidateRank}
+          onKeyUp={onKeyUpCandidateRank}
+          pattern="[0-9]*"
+          placeholder={candidateRankInputValue || value}
+          step="1"
+          type="number"
+          value={candidateRankInputValue}
+        />
+      </div>
+      <div className={styles.actions}>
+        <Button
+          aria-label="Raise position in rankings"
+          onClick={onClickCandidateRankUp}
+        >
+          ↑
+        </Button>
+        <Button
+          aria-label="Drop position in rankings"
+          onClick={onClickCandidateRankDown}
+        >
+          ↓
+        </Button>
+        </div>
+    </li>
   );
 });
 
@@ -157,7 +169,7 @@ const DraggableCandidate = ({
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: { type: ItemTypes.CANDIDATE, id: candidate.id, index },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
@@ -174,4 +186,4 @@ const DraggableCandidate = ({
   );
 };
 
-export default DraggableCandidate;
+export default WithThemeKey(DraggableCandidate);

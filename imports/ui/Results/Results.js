@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Button from '../Button';
+
 const candidatesEliminatedErrorMessage = 'All candidates have been eliminated.';
 const candidatesMissingErrorMessage = 'Coulnd\'t find any candidates.';
 
@@ -96,10 +98,9 @@ const Results = ({
     );
   }
 
-  const { candidates } = poll;
   const ballotsArray = ballots.sort((ballot, ballot2) => ballot.dateCreated > ballot2.dateCreated ? -1 : 1);
 
-  handleClickCalculateWinners = () => {
+  const handleClickCalculateWinners = () => {
     const ballotsArray = ballots.sort((ballot, ballot2) => ballot.dateCreated > ballot2.dateCreated ? -1 : 1);
     const plurality = ballotsArray.length / 2;
     const candidates = [...poll.candidates];
@@ -134,6 +135,9 @@ const Results = ({
       <section>
         <h1>{poll.name}</h1>
         <h2>Results</h2>
+        {errorMessage && (
+          <div>{errorMessage}</div>
+        )}
       </section>
       <section>
         {ballotsArray && ballotsArray.length && (
@@ -154,7 +158,7 @@ const Results = ({
         </section>
       )}
       <section>
-        <button onClick={handleClickCalculateWinners}>Calculate winners!</button>
+        <Button onClick={handleClickCalculateWinners}>Calculate winners!</Button>
         {!!winnerIds.length && (
           <ul>
             {winnerIds.map(winnerId => {

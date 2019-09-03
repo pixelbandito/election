@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "known-properties",
+    "box-model",
+    "box-sizing"
+  ]
+}

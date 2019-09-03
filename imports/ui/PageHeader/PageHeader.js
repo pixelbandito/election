@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
-import ThemeContext, { themeKeys } from '../ThemeContext';
+import { themeKeys } from '../ThemeContext';
 import WithThemeKey from '../WithThemeKey';
+import { LinkButton } from '../Button';
 
-import style from './PageHeader.module.css';
+import styles from './PageHeader.module.css';
 
 const PageHeader = ({
   myPollsCount,
@@ -15,26 +15,54 @@ const PageHeader = ({
   setThemeKey,
   themeKey,
 }) => (
-  <header className={classNames(style.MyPageHeader, style[themeKey])}>
-    <h1 className={style.title}>Polls ({myPollsCount})</h1>
-
-    <label className="hide-not-mine">
-      <input
-        type="checkbox"
-        readOnly
-        checked={hideNotMine}
-        onClick={() => setHideNotMine(!hideNotMine)}
-      />
-      Show only my polls
-    </label>
-
-    <Link to="/polls/create">Create a poll</Link>
-
-    <AccountsUIWrapper />
-
-    <select onChange={(event) => setThemeKey(event.target.value)}>
-      {themeKeys.map(key => <option key={key}>{key}</option>)}
-    </select>
+  <header className={classNames(styles.PageHeader, styles[themeKey])}>
+    <div className={styles.header}>
+      <h1 className={styles.title}>Polls <span className={styles.pollCount}>({myPollsCount})</span></h1>
+    </div>
+    <div className={styles.actions}>
+      <div className={classNames(styles.action, styles.account)}>
+        <AccountsUIWrapper />
+      </div>
+      <div className={classNames(styles.action, styles.filter)}>
+        <label
+          className={styles.filterLabel}
+          htmlForm="labelFilter"
+        >
+          <input
+            className={styles.filterCheck}
+            checked={hideNotMine}
+            id="labelFilter"
+            onClick={() => setHideNotMine(!hideNotMine)}
+            readOnly
+            type="checkbox"
+          />
+          Show only my polls
+        </label>
+      </div>
+      <div className={classNames(styles.action, styles.create)}>
+        <LinkButton
+          className={styles.createButton}
+          to="/polls/create"
+        >
+          Create a poll
+        </LinkButton>
+      </div>
+      <div className={classNames(styles.action, styles.theme)}>
+        <label
+          class={styles.themeLabel}
+          htmlFor="selectTheme"
+        >
+          Choose a theme
+        </label>
+        <select
+          className={styles.themeSelect}
+          id="selectTheme"
+          onChange={(event) => setThemeKey(event.target.value)}
+        >
+          {themeKeys.map(key => <option key={key}>{key}</option>)}
+        </select>
+      </div>
+    </div>
   </header>
 );
 

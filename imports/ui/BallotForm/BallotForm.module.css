@@ -1,0 +1,97 @@
+.irs .header {
+  border-block-end: 2px solid black;
+}
+
+.irs .title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-inline-end: 10px;
+}
+
+.irs .body {
+  align-items: stretch;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.irs .h2 {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0 0 10px;
+  margin: 10px 0;
+}
+
+.irs .form {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.irs .formControl {
+  border-block-end: 2px solid black;
+}
+
+.irs .formControl:last-child {
+  border-block-end-width: 0;
+}
+
+.irs .textControl label {
+  display: block;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.irs .textControl input {
+  background: #F1F4FF;
+  border: 0 solid #F1F4FF;
+  display: block;
+  font-size: 14px;
+  padding: 5px;
+  width: 100%;
+}
+
+.irs .rankControl {
+  align-items: stretch;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.irs .rankLabel {
+  flex: 0 0 auto;
+  padding: 10px;
+  width: 30%;
+}
+
+.irs .rankLabel label {
+  font-size: 20px;
+  font-weight: 900;
+  margin-block-end: 10px;
+}
+
+.irs .instructions {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 16px;
+}
+
+.irs .instructions .h2,
+.irs .instructions p {
+  margin: 10px 0;
+}
+
+.irs .rankInput {
+  background-color: #E9FFEC;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.irs .actions {
+  background: #E9FFEC;
+  border-inline-start: 1px solid black;
+}
+
+.irs .action {
+  background-color: white;
+  border-block-end: 1px solid black;
+  border-inline-end: 1px solid black;
+}
