@@ -53,14 +53,16 @@
 
 .irs .rankControl {
   align-items: stretch;
+  background-color: #E9FFEC;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
+  padding-inline-start: 20px;
 }
 
 .irs .rankLabel {
+  border-block-end: 1px solid black;
   flex: 0 0 auto;
   padding: 10px;
-  width: 30%;
 }
 
 .irs .rankLabel label {
@@ -94,4 +96,17 @@
   background-color: white;
   border-block-end: 1px solid black;
   border-inline-end: 1px solid black;
+}
+
+@media (min-width: 768px) {
+  .irs .rankControl {
+    background-color: transparent;
+    flex-flow: row nowrap;
+    padding-inline-start: 0;
+  }
+
+  .irs .rankLabel {
+    border-block-end-width: 0;
+    width: 30%;
+  }
 }
