@@ -15,7 +15,7 @@ import Polls from './Polls';
 import Results from './Results';
 import ThemeContext from './ThemeContext';
 
-import style from './App.module.css';
+import styles from './App.module.css';
 
 // App component - represents the whole app
 const App = ({
@@ -33,7 +33,7 @@ const App = ({
   return (
     <ThemeContext.Provider value={themeKey} >
       <Router>
-        <div className={classNames(style.App, style[themeKey])}>
+        <div className={classNames(styles.App, styles[themeKey])}>
           <PageHeader
             myPollsCount={myPollsCount}
             hideNotMine={hideNotMine}
@@ -81,7 +81,7 @@ const App = ({
               />
             )} />
             <Route path="/polls" exact render={(routeProps) => (
-              <ul className={style.pollsList}>
+              <ul className={styles.pollsList}>
                 <Polls
                   ballots={ballots}
                   currentUser={currentUser}

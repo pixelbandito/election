@@ -1,11 +1,18 @@
-import React, { Component, Fragment, useMemo, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+// Third-party imports
+// React
+import React, { useMemo, useState } from 'react';
+// Everything else
+import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { Polls as PollsApi } from '../../api/polls.js';
+// Local imports
+// ../../
 import { BallotVouchers as BallotVouchersApi } from '../../api/ballotVouchers';
+
+// ../
 import Button from '../Button';
+import Input from '../Input';
 
 const min = 1;
 const max = 100;
@@ -56,7 +63,7 @@ const BallotVouchers = ({
           <label htmlFor="BallotVoucherQuantityInput">
             How many ballot vouchers do you want?
           </label>
-          <input
+          <Input
             id="BallotVoucherQuantityInput"
             onChange={handleChangeQuantity}
             max={max}
@@ -116,7 +123,7 @@ export default withTracker(({ poll }) => {
 
   return {
     ballotVouchersHandler,
-    ballotVouchers: BallotVouchersApi.find({ ownerId: (currentUser && currentUser._id || 'foo'), pollId: (poll && poll._id) || 'bar' }, { sort: { dateUpdated: -1 } }).fetch(),
+    ballotVouchers: BallotVouchersApi.find({ ownerId: (currentUser && currentUser._id) || 'foo', pollId: (poll && poll._id) || 'bar' }, { sort: { dateUpdated: -1 } }).fetch(),
     ballotVouchersReady: ballotVouchersHandler.ready(),
     currentUser,
   };

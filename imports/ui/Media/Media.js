@@ -1,25 +1,31 @@
+// Third-party imports
+// React
 import React from 'react';
 import classNames from 'classnames';
-import style from './Media.module.css';
+// Everything else
+
+// Local imports
+// ./
+import styles from './Media.module.css';
 
 const Media = props => (
   <div
     {...props}
-    className={classNames(style.Media, props.className)}
+    className={classNames(styles.Media, props.className)}
   />
 );
 
 const MediaItem = props => (
   <div
     {...props}
-    className={classNames(style.Item, props.className)}
+    className={classNames(styles.Item, props.className)}
   />
 );
 
 const MediaBody = props => (
   <div
     {...props}
-    className={classNames(style.Body, props.className)}
+    className={classNames(styles.Body, props.className)}
   />
 );
 

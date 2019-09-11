@@ -1,9 +1,16 @@
+// Third-party imports
 import React, { useEffect, useRef, useState } from 'react';
+
+// Everything else
 import { useDrag, useDrop } from 'react-dnd';
 import classNames from 'classnames';
 
+// Local imports
+// ../../
 import Button from '../../Button';
+import Input from '../../Input';
 import WithThemeKey from '../../WithThemeKey';
+// ./
 import styles from './Candidate.module.css';
 
 const ItemTypes = {
@@ -108,7 +115,7 @@ export const Candidate = React.forwardRef(({
         >
           {candidate.name}
         </label>
-        <input
+        <Input
           className={styles.rank}
           aria-label="Candidate rank"
           id={`candidateRankInput--${candidate.id}`}

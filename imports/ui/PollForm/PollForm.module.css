@@ -1,0 +1,16 @@
+.PollForm {
+
+}
+
+.formControl {
+  display: block;
+}
+
+.irs .textControl label {
+  display: block;
+}
+
+.irs .textControl input {
+  display: block;
+  width: 100%;
+}

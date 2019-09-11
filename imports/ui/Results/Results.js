@@ -1,7 +1,15 @@
+// Third-party imports
+// React
 import React, { useState } from 'react';
+// Everything else
 import { Link } from 'react-router-dom';
 
+// Local imports
+// ../
 import Button from '../Button';
+import WithThemeCssModule from '../WithThemeCssModule';
+// ./
+import styles from './Results.module.css';
 
 const candidatesEliminatedErrorMessage = 'All candidates have been eliminated.';
 const candidatesMissingErrorMessage = 'Coulnd\'t find any candidates.';
@@ -83,6 +91,7 @@ const calculateResults = ({
 
 const Results = ({
   ballots,
+  className,
   currentUser,
   match,
   poll,
@@ -128,7 +137,7 @@ const Results = ({
   const ownedByCurrentUser = poll.ownerId === (currentUser || {})._id;
 
   return (
-    <div>
+    <div className={className}>
       <section>
         <Link to="/polls">←</Link>
       </section>
@@ -180,4 +189,4 @@ const Results = ({
   );
 };
 
-export default Results;
+export default WithThemeCssModule(Results, styles);

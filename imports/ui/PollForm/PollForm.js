@@ -1,12 +1,23 @@
+// Third-party imports
+// React
 import React, { createRef, Fragment, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+// Everything else
 import { Link, Redirect } from 'react-router-dom';
+import { Meteor } from 'meteor/meteor';
+import classNames from 'classnames';
 
+// Local imports
+// ../
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import CandidateForm from '../CandidateForm';
 import Button from '../Button';
+import Input from '../Input';
+import WithThemeCssModule from '../WithThemeCssModule';
+// ./
+import styles from './PollForm.module.css';
 
 const PollForm = ({
+  className,
   currentUser,
   initPollForm,
   onBack,
@@ -57,23 +68,23 @@ const PollForm = ({
 
   useEffect(() => {
     multivoteInputRef.checked = pollForm.multivote;
-  }, [multivoteInputRef.current]);
+  }, [multivoteInputRef.checked, pollForm.multivote]);
 
   useEffect(() => {
     anonymousInputRef.checked = pollForm.anonymous;
-  }, [anonymousInputRef.current]);
+  }, [anonymousInputRef.checked, pollForm.anonymous]);
 
   useEffect(() => {
     enabledInputRef.checked = pollForm.enabled;
-  }, [enabledInputRef.current]);
+  }, [enabledInputRef.checked, pollForm.enabled]);
 
   useEffect(() => {
     nameInputRef.value = pollForm.name;
-  }, [nameInputRef.current]);
+  }, [nameInputRef.value, pollForm.name]);
 
   useEffect(() => {
     publicInputRef.checked = pollForm.public;
-  }, [publicInputRef.current]);
+  }, [publicInputRef.checked, pollForm.public]);
 
   const handleSetCandidates = (nextCandidates) => {
     setPollForm({
@@ -119,11 +130,11 @@ const PollForm = ({
   };
 
   const handleChangePublic = (event) => {
-    const public = event.target.checked;
+    const isPublic = event.target.checked;
 
     setPollForm({
       ...pollForm,
-      public,
+      public: isPublic,
     });
   };
 
@@ -163,15 +174,18 @@ const PollForm = ({
   };
 
   const handleClickDelete = (event) => {
-    const confirmed = confirm('Are you sure you want to delete this poll?');
+    const confirmed = window.confirm('Are you sure you want to delete this poll?');
 
     if (confirmed) {
-      Meteor.call('polls.remove', poll._id);
+      Meteor.call('polls.remove', pollForm._id);
     }
   };
 
   return (
-    <form onSubmit={handleSubmitPoll}>
+    <form
+      className={className}
+      onSubmit={handleSubmitPoll}
+    >
       {(goHome || (pollForm && pollForm._id && !ownedByCurrentUser)) && <Redirect to='/polls' />}
       <section>
         {onBack && <Button onClick={onBack}>x</Button>}
@@ -185,10 +199,12 @@ const PollForm = ({
       )}
       {currentUser && (
         <Fragment>
-          <section>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__name`}>Name</label>
-            <input
-              id={`${pollForm._id || ''}-createPoll__name`}
+          <section className={classNames(styles.formControl, styles.textControl)}>
+            <label htmlFor={`${pollForm._id || ''}-createPoll__polltitle`}>Poll name</label>
+            <Input
+              data-lpignore="true"
+              autofill="false"
+              id={`${pollForm._id || ''}-createPoll__pollname`}
               value={pollForm.name}
               type="text"
               onChange={handleChangeName}
@@ -205,9 +221,10 @@ const PollForm = ({
               poll={pollForm}
             />
           </section>
-          <section>
+          <section className={classNames(styles.formControl, styles.checkboxControl)}>
             <label htmlFor={`${pollForm._id || ''}-createPoll__enable`}>
-              <input
+              <Input
+                className={styles.checkbox}
                 id={`${pollForm._id || ''}-createPoll__enable`}
                 onChange={handleChangeEnabled}
                 ref={enabledInputRef}
@@ -217,9 +234,10 @@ const PollForm = ({
               Enabled
             </label>
           </section>
-          <section>
+          <section className={classNames(styles.formControl, styles.checkboxControl)}>
             <label htmlFor={`${pollForm._id || ''}-createPoll__public`}>
-              <input
+              <Input
+                className={styles.checkbox}
                 id={`${pollForm._id || ''}-createPoll__public`}
                 onChange={handleChangePublic}
                 ref={publicInputRef}
@@ -229,9 +247,10 @@ const PollForm = ({
               Public
             </label>
           </section>
-          <section>
+          <section className={classNames(styles.formControl, styles.checkboxControl)}>
             <label htmlFor={`${pollForm._id || ''}-createPoll__anonymous`}>
-              <input
+              <Input
+                className={styles.checkbox}
                 id={`${pollForm._id || ''}-createPoll__anonymous`}
                 onChange={handleChangeAnonymous}
                 ref={anonymousInputRef}
@@ -241,9 +260,10 @@ const PollForm = ({
               Anonymous
             </label>
           </section>
-          <section>
+          <section className={classNames(styles.formControl, styles.checkboxControl)}>
             <label htmlFor={`${pollForm._id || ''}-createPoll__multivote`}>
-              <input
+              <Input
+                className={styles.checkbox}
                 id={`${pollForm._id || ''}-createPoll__multivote`}
                 onChange={handleChangeMultivote}
                 ref={multivoteInputRef}
@@ -253,10 +273,11 @@ const PollForm = ({
               Multivote
             </label>
           </section>
-          <section>
+          <section className={styles.actions}>
             {pollForm._id && ownedByCurrentUser && (
               <div style={{ float: 'right' }}>
                 <Button
+                  className={styles.action}
                   onClick={handleClickDelete}
                   style={{ color: 'red' }}
                 >
@@ -264,7 +285,12 @@ const PollForm = ({
                 </Button>
               </div>
             )}
-            <Button type="submit">Submit</Button>
+            <Button
+              className={styles.action}
+              type="submit"
+            >
+              Submit
+            </Button>
           </section>
         </Fragment>
       )}
@@ -277,4 +303,4 @@ const PollForm = ({
   );
 }
 
-export default PollForm;
+export default WithThemeCssModule(PollForm, styles);

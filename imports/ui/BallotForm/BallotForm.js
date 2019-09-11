@@ -1,20 +1,29 @@
+// Third-party imports
+// React
 import React, { Fragment, useMemo, useEffect, useState } from 'react';
+
+// Everything else
+import { DndProvider/*, DragDropContext*/ } from 'react-dnd';
 import { Meteor } from 'meteor/meteor';
 import { Redirect } from 'react-router-dom';
-import { DndProvider/*, DragDropContext*/ } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import classNames from 'classnames';
-// import TouchBackend from 'react-dnd-touch-backend'
-// import MultiBackend from 'react-dnd-multi-backend';
+import HTML5Backend from 'react-dnd-html5-backend';
 // import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch';
+// import MultiBackend from 'react-dnd-multi-backend';
 import qs from 'qs';
+// import TouchBackend from 'react-dnd-touch-backend'
 
-import WithThemeKey from '../WithThemeKey';
-import Button, { LinkButton } from '../Button';
-import Media from '../Media';
+// Local imports
+// ../
 import BackLink from '../BackLink';
-import styles from './BallotForm.module.css';
+import Button, { LinkButton } from '../Button';
+import Input from '../Input';
+import Media from '../Media';
+import WithThemeCssModule from '../WithThemeCssModule';
+
+// ./
 import Candidate from './Candidate';
+import styles from './BallotForm.module.css';
 
 /*
 export const defaultBallot = {
@@ -38,7 +47,6 @@ const BallotForm = ({
   location,
   pollsReady,
   poll,
-  themeKey,
 }) => {
   // When the ballot is cast, this controls the Redirect component
   const [goHome, setGoHome] = useState(false);
@@ -176,7 +184,7 @@ const BallotForm = ({
   }
 
   return (
-    <div className={classNames(styles.BallotForm, styles[themeKey])}>
+    <div className={styles.BallotForm}>
       {goHome && <Redirect to='/polls' />}
       <section className={styles.header}>
         <BackLink />
@@ -188,7 +196,7 @@ const BallotForm = ({
             <label htmlFor="voterName">
               Your name
             </label>
-            <input
+            <Input
               id="voterName"
               type="text"
               onChange={handleVoterChangeNameInput}
@@ -237,4 +245,4 @@ const BallotForm = ({
   );
 };
 
-export default WithThemeKey(DraggableBallotForm);
+export default WithThemeCssModule(DraggableBallotForm, styles);

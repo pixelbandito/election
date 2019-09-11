@@ -1,24 +1,30 @@
+// Third-party imports
+// React
 import React from 'react';
-import classNames from 'classnames';
+// Everything else
 import { Route, Switch } from 'react-router-dom';
+import classNames from 'classnames';
 
-import AccountsUIWrapper from '../AccountsUIWrapper.js';
-import { themeKeys } from '../ThemeContext';
-import WithThemeKey from '../WithThemeKey';
+// Local imports
+// ../
 import { LinkButton } from '../Button';
+import { themeKeys } from '../ThemeContext';
+import AccountsUIWrapper from '../AccountsUIWrapper.js';
 import BackLink from '../BackLink';
-
+import WithThemeCssModule from '../WithThemeCssModule';
+// ./
 import styles from './PageHeader.module.css';
 
 const PageHeader = ({
-  myPollsCount,
+  className,
   hideNotMine,
   location,
+  myPollsCount,
   setHideNotMine,
   setThemeKey,
   themeKey,
 }) => (
-  <header className={classNames(styles.PageHeader, styles[themeKey])}>
+  <header className={classNames(className, styles.PageHeader)}>
     <div className={styles.header}>
       <h1 className={styles.title}>
         <Switch>
@@ -63,7 +69,7 @@ const PageHeader = ({
       </div>
       <div className={classNames(styles.action, styles.theme)}>
         <label
-          class={styles.themeLabel}
+          className={styles.themeLabel}
           htmlFor="selectTheme"
         >
           Choose a theme
@@ -80,4 +86,4 @@ const PageHeader = ({
   </header>
 );
 
-export default WithThemeKey(PageHeader);
+export default WithThemeCssModule(PageHeader, styles);

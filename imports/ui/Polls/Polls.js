@@ -1,5 +1,10 @@
+// Third-party imports
+// React
 import React from 'react';
+// Everything else
 
+// Local imports
+// ../
 import { Summary } from '../Poll';
 
 const Polls = ({

@@ -1,22 +1,30 @@
+// Third-party imports
+// React
 import React from 'react';
+
+// Everything else
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
-import style from './Button.module.css';
+// Local imports
+// ../
+import WithThemeCssModule from '../WithThemeCssModule';
+// ./
+import styles from './Button.module.css';
 
 const Button = (props) => (
   <button
     type="button"
     {...props}
-    className={classNames(style.Button, props.className)}
+    className={classNames(styles.Button, props.className)}
   />
 );
 
-export const LinkButton = (props) => (
+export const LinkButton = WithThemeCssModule((props) => (
   <Link
     {...props}
-    className={classNames(style.Button, style.Link, props.className)}
+    className={classNames(styles.Button, styles.Link, props.className)}
   />
-);
+), styles);
 
-export default Button;
+export default WithThemeCssModule(Button, styles);

@@ -1,18 +1,22 @@
+// Third-party imports
+// React
 import React, { useState } from 'react';
+
+// Everything else
+import classNames from 'classnames';
 import shortid from 'shortid';
 
+// Local imports
+// ../
+import WithThemeCssModule from '../WithThemeCssModule';
 import Button from '../Button';
-
-/*
-  {
-    id: String,
-    name: String,
-  }
-*/
+// ./
+import styles from './CandidateForm.module.css';
 
 const CandidateForm = ({
-  onSetCandidates,
   candidates,
+  className,
+  onSetCandidates,
   poll,
 }) => {
   const [newCandidateName, setNewCandidateName] = useState('');
@@ -92,7 +96,7 @@ const CandidateForm = ({
   }
 
   return (
-    <ul>
+    <ul className={classNames(styles.CandidateForm, className)} >
       {currentCandidates}
       <li key="newCandidate">
           <label htmlFor="newCandidate">
@@ -117,4 +121,4 @@ const CandidateForm = ({
   );
 };
 
-export default CandidateForm;
+export default WithThemeCssModule(CandidateForm, styles);

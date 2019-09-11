@@ -1,54 +1,48 @@
-import { Meteor } from 'meteor/meteor';
+// Third-party imports
+// React
 import React, { Fragment, useState } from 'react';
+
+// Everything else
+import { Meteor } from 'meteor/meteor';
 import classNames from 'classnames';
 
-// Local imports, by proximity
+// Local imports
+// ../
 import { LinkButton } from '../Button';
 import buttonStyle from '../Button/Button.module.css';
 import Media from '../Media';
 import PollForm from '../PollForm';
-import WithThemeKey from '../WithThemeKey';
-import style from './Summary.module.css';
+import WithThemeCssModule from '../WithThemeCssModule';
+// ./
+import styles from './Summary.module.css';
 
-/*
-candidates: [],
-dateCreated: new Date(0).valueOf(),
-dateUpdated: new Date(0).valueOf(),
-enabled: false,
-public: false,
-name: '',
-ownerId: '',
-*/
-
-// Poll component - represents a single todo item
 const Summary = ({
+  className,
   currentUser,
   ballotsCount,
   poll,
   ownedByCurrentUser,
-  themeKey,
 }) => {
-  console.log({ themeKey });
   const [isEditing, setIsEditing] = useState(false);
 
   const dateCreated = new Date(poll.dateCreated).toLocaleString(window.navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <li className={classNames(style.Summary, style[themeKey], {
-      [style.editable]: ownedByCurrentUser,
-      [style.enabled]: !poll.enabled,
-      [style.public]: poll.enabled,
-      [style.private]: !poll.enabled,
-      [style.disabled]: !poll.enabled,
+    <li className={classNames(className, styles.Summary, {
+      [styles.editable]: ownedByCurrentUser,
+      [styles.enabled]: !poll.enabled,
+      [styles.public]: poll.enabled,
+      [styles.private]: !poll.enabled,
+      [styles.disabled]: !poll.enabled,
     })}>
       {!isEditing && (
         <Fragment>
-          <div className={style.content}>
-            <Media className={style.header}>
+          <div className={styles.content}>
+            <Media className={styles.header}>
               <Media.Body>
-                <span className={style.title}>{poll.name}</span>
-                {!poll.enabled && <span className={classNames(style.badge, style.disabled)}>Disabled</span>}
-                {!poll.public && <span className={classNames(style.badge, style.private)}>Private</span>}
+                <span className={styles.title}>{poll.name}</span>
+                {!poll.enabled && <span className={classNames(styles.badge, styles.disabled)}>Disabled</span>}
+                {!poll.public && <span className={classNames(styles.badge, styles.private)}>Private</span>}
               </Media.Body>
               {ownedByCurrentUser ? (
                 <Media.Item>
@@ -62,30 +56,30 @@ const Summary = ({
                 </Media.Item>
               ) : ''}
             </Media>
-            <div className={style.meta}>
-              <p className={style.byline}>By {currentUser.username} on {dateCreated}</p>
+            <div className={styles.meta}>
+              <p className={styles.byline}>By {currentUser.username} on {dateCreated}</p>
               {poll.candidates && poll.candidates.length && (
-                <p className={style.candidates}>Candidates: {poll.candidates.map(c => c.name).join(', ')}</p>
+                <p className={styles.candidates}>Candidates: {poll.candidates.map(c => c.name).join(', ')}</p>
               )}
             </div>
           </div>
-          <div className={style.actions}>
-            <Media className={style.actions__media}>
+          <div className={styles.actions}>
+            <Media className={styles.actions__media}>
               {poll.enabled && (
-                <Media.Item className={style.action}>
+                <Media.Item className={styles.action}>
                   <LinkButton to={`/polls/${poll._id}/vote`} >
                     Vote!
                   </LinkButton>
                 </Media.Item>
               )}
               {ownedByCurrentUser && (
-                <Media.Item className={style.action}>
+                <Media.Item className={styles.action}>
                   <LinkButton to={`/polls/${poll._id}/results`}>
                     View results
                   </LinkButton>
                 </Media.Item>
               )}
-              <Media.Body className={style.voteCount}>
+              <Media.Body className={styles.voteCount}>
                 <span>
                   <strong>{ballotsCount}</strong> vote{ballotsCount !== 1 && 's'} so far
                 </span>
@@ -108,4 +102,4 @@ const Summary = ({
   );
 }
 
-export default WithThemeKey(Summary);
+export default WithThemeCssModule(Summary, styles);
