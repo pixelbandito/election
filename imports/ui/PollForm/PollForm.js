@@ -9,8 +9,9 @@ import classNames from 'classnames';
 // Local imports
 // ../
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
-import CandidateForm from '../CandidateForm';
 import Button from '../Button';
+import CandidateForm from '../CandidateForm';
+import Controls from '../Controls';
 import Input from '../Input';
 import WithThemeCssModule from '../WithThemeCssModule';
 // ./
@@ -183,14 +184,10 @@ const PollForm = ({
 
   return (
     <form
-      className={className}
+      className={classNames(className, styles.PollForm)}
       onSubmit={handleSubmitPoll}
     >
       {(goHome || (pollForm && pollForm._id && !ownedByCurrentUser)) && <Redirect to='/polls' />}
-      <section>
-        {onBack && <Button onClick={onBack}>x</Button>}
-        {!onBack && <Link to="/polls">←</Link>}
-      </section>
       {!currentUser && (
         <div>
           <div>Log in or create an account to make your own poll</div>
@@ -199,17 +196,18 @@ const PollForm = ({
       )}
       {currentUser && (
         <Fragment>
-          <section className={classNames(styles.formControl, styles.textControl)}>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__polltitle`}>Poll name</label>
-            <Input
-              data-lpignore="true"
-              autofill="false"
-              id={`${pollForm._id || ''}-createPoll__pollname`}
-              value={pollForm.name}
-              type="text"
-              onChange={handleChangeName}
-              ref={nameInputRef}
-              placeholder="Type to add poll name"
+          <section>
+            <Controls.Text
+              fill
+              inputProps={{
+                'data-lpignore': 'true',
+                autofill: 'false',
+                value: pollForm.name,
+                onChange: handleChangeName,
+                ref: nameInputRef,
+                placeholder: 'Type to add poll name',
+              }}
+              label="Poll name"
             />
           </section>
           <section>
@@ -222,56 +220,48 @@ const PollForm = ({
             />
           </section>
           <section className={classNames(styles.formControl, styles.checkboxControl)}>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__enable`}>
-              <Input
-                className={styles.checkbox}
-                id={`${pollForm._id || ''}-createPoll__enable`}
-                onChange={handleChangeEnabled}
-                ref={enabledInputRef}
-                type="checkbox"
-                checked={pollForm.enabled}
-              />
-              Enabled
-            </label>
+            <Controls.Checkbox
+              inputProps={{
+                onChange: handleChangeEnabled,
+                ref: enabledInputRef,
+                checked: pollForm.enabled,
+              }}
+              label="Enabled"
+              modifiers={['horizontal']}
+            />
           </section>
           <section className={classNames(styles.formControl, styles.checkboxControl)}>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__public`}>
-              <Input
-                className={styles.checkbox}
-                id={`${pollForm._id || ''}-createPoll__public`}
-                onChange={handleChangePublic}
-                ref={publicInputRef}
-                type="checkbox"
-                checked={pollForm.public}
-              />
-              Public
-            </label>
+            <Controls.Checkbox
+              inputProps={{
+                onChange: handleChangePublic,
+                ref: publicInputRef,
+                checked: pollForm.public,
+              }}
+              label="Public"
+              modifiers={['horizontal']}
+            />
           </section>
           <section className={classNames(styles.formControl, styles.checkboxControl)}>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__anonymous`}>
-              <Input
-                className={styles.checkbox}
-                id={`${pollForm._id || ''}-createPoll__anonymous`}
-                onChange={handleChangeAnonymous}
-                ref={anonymousInputRef}
-                type="checkbox"
-                checked={pollForm.anonymous}
-              />
-              Anonymous
-            </label>
+            <Controls.Checkbox
+              inputProps={{
+                onChange: handleChangeAnonymous,
+                ref: anonymousInputRef,
+                checked: pollForm.anonymous,
+              }}
+              label="Anonymous"
+              modifiers={['horizontal']}
+            />
           </section>
           <section className={classNames(styles.formControl, styles.checkboxControl)}>
-            <label htmlFor={`${pollForm._id || ''}-createPoll__multivote`}>
-              <Input
-                className={styles.checkbox}
-                id={`${pollForm._id || ''}-createPoll__multivote`}
-                onChange={handleChangeMultivote}
-                ref={multivoteInputRef}
-                type="checkbox"
-                checked={pollForm.multivote}
-              />
-              Multivote
-            </label>
+            <Controls.Checkbox
+              inputProps={{
+                onChange: handleChangeMultivote,
+                ref: multivoteInputRef,
+                checked: pollForm.multivote,
+              }}
+              label="Multivote"
+              modifiers={['horizontal']}
+            />
           </section>
           <section className={styles.actions}>
             {pollForm._id && ownedByCurrentUser && (

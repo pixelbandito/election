@@ -36,24 +36,9 @@
   border-block-end-width: 0;
 }
 
-.irs .textControl label {
-  display: block;
-  font-size: 14px;
-  padding: 5px;
-}
-
-.irs .textControl input {
-  background: #F1F4FF;
-  border: 0 solid #F1F4FF;
-  display: block;
-  font-size: 14px;
-  padding: 5px;
-  width: 100%;
-}
-
 .irs .rankControl {
   align-items: stretch;
-  background-color: #E9FFEC;
+  background-color: var(--green-light);
   display: flex;
   flex-flow: column nowrap;
   padding-inline-start: 20px;
@@ -82,13 +67,13 @@
 }
 
 .irs .rankInput {
-  background-color: #E9FFEC;
+  background-color: var(--green-light);
   flex: 1 1 auto;
   min-width: 0;
 }
 
 .irs .actions {
-  background: #E9FFEC;
+  background: var(--green-light);
   border-inline-start: 1px solid black;
 }
 

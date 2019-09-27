@@ -1,5 +1,6 @@
-.irs {
+.PageHeader.irs {
   align-items: stretch;
+  border-block-end: 2px solid black;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -45,7 +46,7 @@
 
 .irs .account {
   align-items: center;
-  background-color: #E9FFEC;
+  background-color: var(--green-light);
   border-block-end: 1px solid black;
   border-inline-start-width: 0;
   display: flex;
@@ -73,7 +74,7 @@
 
 .irs .filter {
   align-items: center;
-  background: #E9FFEC;
+  background: var(--green-light);
   border-inline-start-width: 0;
   display: flex;
   flex-flow: row nowrap;
@@ -110,7 +111,7 @@
 }
 
 @media (min-width: 768px) {
-  .irs {
+  .PageHeader.irs {
     flex-flow: row nowrap;
   }
 

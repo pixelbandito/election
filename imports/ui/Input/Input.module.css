@@ -7,3 +7,8 @@
   flex: 1 1 auto;
   padding: 5px;
 }
+
+.Input:hover,
+.Input:focus {
+  position: relative;
+}

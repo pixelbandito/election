@@ -44,8 +44,6 @@ body :global {
   width: 90vw;
 }
 
-/* CSSLint disable */
-:global :root {
-  --pink: pink;
+.irs:global {
+  --green-light: #e9ffec;
 }
-/* CSSLint disable */

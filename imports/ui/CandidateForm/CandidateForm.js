@@ -10,6 +10,7 @@ import shortid from 'shortid';
 // ../
 import WithThemeCssModule from '../WithThemeCssModule';
 import Button from '../Button';
+import Controls from '../Controls';
 // ./
 import styles from './CandidateForm.module.css';
 
@@ -52,16 +53,20 @@ const CandidateForm = ({
   }
 
   const currentCandidates = candidates && candidates.map(candidate => (
-    <li key={candidate.id}>
-      <label htmlFor={candidate.id}>
-        Candidate
-      </label>
-      <input
-        id={candidate.id}
-        onChange={handleChangeCandidateNameInput(candidate)}
-        placeholder="Candidate name"
-        type="text"
-        value={candidate.name}
+    <li
+      className={styles.Candidate}
+      key={candidate.id}
+    >
+      <Controls.Text
+        childrenProps={{ style: { padding: '5px' } }}
+        fill
+        label="Candidate name"
+        modifiers={['horizontal']}
+        inputProps={{
+          onChange: handleChangeCandidateNameInput(candidate),
+          placeholder: 'Candidate name',
+          value: candidate.name,
+        }}
       />
     </li>
   ));
@@ -98,24 +103,31 @@ const CandidateForm = ({
   return (
     <ul className={classNames(styles.CandidateForm, className)} >
       {currentCandidates}
-      <li key="newCandidate">
-          <label htmlFor="newCandidate">
-            New candidate
-          </label>
-          <input
-            id="newCandidate"
-            placeholder="Candidate name"
-            type="text"
-            value={newCandidateName}
-            onChange={event => setNewCandidateName(event.target.value)}
-            onKeyUp={handleKeyUpNewCandidateName}
-          />
+      <li
+        className={classNames(styles.Candidate, styles.newCandidate)}
+        key="newCandidate"
+      >
+        <Controls.Text
+          childrenProps={{ style: { padding: '5px' } }}
+          className={styles.newCandidateName}
+          fill
+          inputProps={{
+            placeholder: 'Candidate name',
+            value: newCandidateName,
+            onChange: event => setNewCandidateName(event.target.value),
+            onKeyUp: handleKeyUpNewCandidateName,
+          }}
+          label="New Candidate"
+          modifiers={['horizontal']}
+
+        />
         <Button
-            disabled={getAddCandidateDisabled()}
-            onClick={submitAddCandidateForm}
-          >
-            Add candidate
-          </Button>
+          className={styles.newCandidateButton}
+          disabled={getAddCandidateDisabled()}
+          onClick={submitAddCandidateForm}
+        >
+          Add candidate
+        </Button>
       </li>
     </ul>
   );

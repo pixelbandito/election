@@ -1,7 +1,6 @@
 // Third-party imports
 // React
 import React, { Fragment, useMemo, useEffect, useState } from 'react';
-
 // Everything else
 import { DndProvider/*, DragDropContext*/ } from 'react-dnd';
 import { Meteor } from 'meteor/meteor';
@@ -15,26 +14,14 @@ import qs from 'qs';
 
 // Local imports
 // ../
-import BackLink from '../BackLink';
 import Button, { LinkButton } from '../Button';
-import Input from '../Input';
+import Controls from '../Controls';
 import Media from '../Media';
 import WithThemeCssModule from '../WithThemeCssModule';
 
 // ./
 import Candidate from './Candidate';
 import styles from './BallotForm.module.css';
-
-/*
-export const defaultBallot = {
-  candidateIdRanks: [],
-  dateSubmitted: new Date(0).valueOf(),
-  id: '',
-  pollId: '',
-  submitted: false,
-  voterName: ''
-};
-*/
 
 // const DraggableBallotForm = DragDropContext(MultiBackend(HTML5toTouch))(BallotForm);
 
@@ -43,6 +30,7 @@ const DraggableBallotForm = (props) => (
 );
 
 const BallotForm = ({
+  className,
   currentUser,
   location,
   pollsReady,
@@ -184,24 +172,22 @@ const BallotForm = ({
   }
 
   return (
-    <div className={styles.BallotForm}>
+    <div className={classNames(className, styles.BallotForm)}>
       {goHome && <Redirect to='/polls' />}
       <section className={styles.header}>
-        <BackLink />
         <h1 className={styles.title}>{poll.name}</h1>
       </section>
       <section className={styles.body} >
         <form className={styles.form} onSubmit={handleSubmitBallot}>
           <section className={classNames(styles.formControl, styles.textControl)}>
-            <label htmlFor="voterName">
-              Your name
-            </label>
-            <Input
-              id="voterName"
-              type="text"
-              onChange={handleVoterChangeNameInput}
-              value={voterName}
-              disabled={currentUser && poll.anonymous && !ballotVoucherUuid ? true : undefined}
+            <Controls.Text
+              fill
+              inputProps={{
+                disabled: currentUser && poll.anonymous && !ballotVoucherUuid ? true : undefined,
+                onChange: handleVoterChangeNameInput,
+                value: voterName,
+              }}
+              label="Your name"
             />
           </section>
           <section className={classNames(styles.formControl, styles.rankControl)}>

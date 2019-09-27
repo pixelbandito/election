@@ -1,7 +1,35 @@
 .CandidateForm {
-  background: green;  
+  background: var(--green-light);
+}
+
+.irs .Candidate {
+  border: 0 solid black;
+}
+
+.irs .Candidate {
+  border-bottom-width: 1px;
+}
+
+.irs .Candidate:last-of-type {
+  border-bottom-width: 0;
+}
+
+.newCandidate {
+  align-content: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.newCandidateName {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.newCandidateButton {
+  flex: 0 0 auto;
 }
 
 .irs {
-  background: pink;
+
 }

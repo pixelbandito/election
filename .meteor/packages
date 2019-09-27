@@ -24,3 +24,7 @@ accounts-password@1.5.1
 
 meteortesting:mocha
 nathantreid:css-modules
+accounts-facebook
+accounts-google
+accounts-twitter
+accounts-github

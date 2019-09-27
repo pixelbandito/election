@@ -75,7 +75,7 @@
 
 .irs .voteCount {
   align-items: center;
-  background: #E9FFEC;
+  background: var(--green-light);
   display: flex;
   font-family: "Times New Roman", Georgia, serif;
   font-size: 16px;
@@ -113,7 +113,7 @@
   }
 
   .irs .meta {
-    background-color: #E9FFEC;
+    background-color: var(--green-light);
     padding: 5px;
   }
 

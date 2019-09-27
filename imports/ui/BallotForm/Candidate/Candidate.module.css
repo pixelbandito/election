@@ -1,6 +1,6 @@
 .irs {
   align-items: stretch;
-  background: #E9FFEC;
+  background: var(--green-light);
   border-block-end: 1px solid black;
   display: flex;
   flex-flow: row nowrap;

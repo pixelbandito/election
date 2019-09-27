@@ -10,7 +10,11 @@ const WithThemeCssModule = (BaseComponent, styles) => React.forwardRef((props, r
         {...props}
         ref={ref}
         themeKey={themeKey || ''}
-        className={classNames(props.className, styles[themeKey])}
+        className={classNames(
+          props.className,
+          styles[themeKey],
+          props.modifiers && props.modifiers.length ? props.modifiers.map(m => styles[m]) : [],
+        )}
       />
     )}
   </ThemeContext.Consumer>

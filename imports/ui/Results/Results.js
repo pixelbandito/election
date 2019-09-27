@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 // Everything else
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 // Local imports
 // ../
@@ -137,18 +138,15 @@ const Results = ({
   const ownedByCurrentUser = poll.ownerId === (currentUser || {})._id;
 
   return (
-    <div className={className}>
-      <section>
-        <Link to="/polls">←</Link>
-      </section>
-      <section>
+    <div className={classNames(styles.Results, className)}>
+      <section className={styles.header}>
         <h1>{poll.name}</h1>
         <h2>Results</h2>
         {errorMessage && (
           <div>{errorMessage}</div>
         )}
       </section>
-      <section>
+      <section className={styles.ballots}>
         {ballotsArray && ballotsArray.length && (
           <ul>
             {ballots.map(ballot => (
@@ -160,21 +158,31 @@ const Results = ({
         )}
       </section>
       {poll._id && poll.anonymous && ownedByCurrentUser && (
-        <section>
+        <section className={styles.invite}>
           <div>
             <Link to={`/polls/${poll._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
           </div>
         </section>
       )}
-      <section>
-        <Button onClick={handleClickCalculateWinners}>Calculate winners!</Button>
+      <section className={styles.calculate}>
+        <Button
+          className={styles.calculateButton}
+          onClick={handleClickCalculateWinners}
+        >
+          Calculate winners!
+        </Button>
+      </section>
+      <section className={styles.winners}>
         {!!winnerIds.length && (
-          <ul>
+          <ul className={styles.winnersList}>
             {winnerIds.map(winnerId => {
               const winner = poll.candidates.find(candidate => candidate.id === winnerId);
               if (winner && winner.name) {
                 return (
-                  <li key={winnerId}>
+                  <li
+                    className={styles.winner}
+                    key={winnerId}
+                  >
                     {winner.name}
                   </li>
                 );
