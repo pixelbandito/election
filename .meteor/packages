@@ -28,3 +28,7 @@ accounts-facebook
 accounts-google
 accounts-twitter
 accounts-github
+google-config-ui
+facebook-config-ui
+twitter-config-ui
+github-config-ui

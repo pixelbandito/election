@@ -35,10 +35,13 @@ ecmascript-runtime-server@0.8.0-beta182.13
 ejson@1.1.0
 email@1.2.3
 es5-shim@4.8.0
+facebook-config-ui@1.0.2
 facebook-oauth@1.6.0
 fetch@0.1.1
 geojson-utils@1.0.10
+github-config-ui@1.0.1
 github-oauth@1.2.2
+google-config-ui@1.0.1
 google-oauth@1.2.6
 hot-code-push@1.0.4
 html-tools@1.0.11
@@ -105,6 +108,7 @@ templating-runtime@1.2.15
 templating-tools@1.1.2
 tmeasday:check-npm-versions@0.3.2
 tracker@1.2.0
+twitter-config-ui@1.0.0
 twitter-oauth@1.2.0
 underscore@1.0.10
 url@1.2.0
