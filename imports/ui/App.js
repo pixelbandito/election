@@ -49,7 +49,7 @@ const App = ({
                 pollsReady={pollsReady}
               />
             )} />
-            <Route path="/polls/:pollId/results" exact render={(routeProps) => (
+            <Route path="/polls/:pollId/results" render={(routeProps) => (
               <Results
                 {...routeProps}
                 ballots={ballots.filter(ballot => ballot.pollId === routeProps.match.params.pollId)}

@@ -25,6 +25,8 @@ import styles from './BallotForm.module.css';
 
 // const DraggableBallotForm = DragDropContext(MultiBackend(HTML5toTouch))(BallotForm);
 
+console.log({ DndProvider });
+
 const DraggableBallotForm = (props) => (
   <DndProvider backend={HTML5Backend}><BallotForm {...props} /></DndProvider>
 );

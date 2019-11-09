@@ -6,42 +6,46 @@
   flex-flow: column nowrap;
 }
 
-.Control.fill {
+.fill {
   align-content: stretch;
   align-items: stretch;
 }
 
 @media (min-width: 480px) {
-  .Control.horizontal  {
+  .horizontal {
     align-content: center;
     align-items: center;
     flex-flow: row nowrap;
   }
 
-  .Control.horizontal.fill {
+  .horizontal.fill {
     align-content: stretch;
     align-items: stretch;
   }
 }
 
-.Control.irs {
+.irs {
   background-color: var(--green-light);
 }
 
 /* .label */
+.horizontal .label {
+  align-self: center;
+}
+
 @media (min-width: 480px) {
-  .Control.horizontal .label {
+  .horizontal .label {
     flex: 0 0 10rem;
   }
 }
 
 /* .input */
-.Control.Text.fill .input {
+.fill .input {
   width: 100%;
 }
 
 @media (min-width: 480px) {
-  .Control.horizontal .input {
+  .horizontal .input {
     flex: 1 1 auto;
     min-width: 0;
   }

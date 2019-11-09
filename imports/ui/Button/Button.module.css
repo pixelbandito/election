@@ -8,6 +8,17 @@
   font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 16px;
   padding: 5px 10px;
+  text-decoration: none;
+}
+
+.Button:active,
+.Button.active {
+  color: black;
+}
+
+.Button:disabled,
+.Button.disabled {
+  color: #666;
 }
 
 .Button:hover:not(:disabled) {
@@ -21,24 +32,11 @@
   z-index: 1;
 }
 
-.Button:disabled,
-.disabled:not(:disabled) {
-  color: #666666;
-}
-
-.Link {
-  text-decoration: none;
-}
-
-.Link:active {
-  color: black;
-}
-
-.Link:visited:not(:focus):not(:active) {
+.Button:visited:not(:focus):not(:active):not(.active) {
   color: blue;
 }
 
-.clear {
+.Button.clear {
   background-color: transparent;
   border-color: transparent;
 }

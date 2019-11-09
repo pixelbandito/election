@@ -9,11 +9,15 @@ import classNames from 'classnames';
 import { LinkButton } from '../Button';
 import buttonStyle from '../Button/Button.module.css';
 
-const BackLink = (props) => (
+const BackLink = ({
+  className,
+  to,
+  ...passedProps
+}) => (
   <LinkButton
-    {...props}
-    className={classNames(props.className, buttonStyle.clear)}
-    to={props.to || '/polls'}>
+    {...passedProps}
+    className={classNames(className, buttonStyle.clear)}
+    to={to || '/polls'}>
     ⌂
   </LinkButton>
 );

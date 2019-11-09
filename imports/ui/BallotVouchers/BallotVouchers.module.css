@@ -1,0 +1,99 @@
+.filled {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
+  align-self: stretch;
+}
+
+.irs .head {
+  border-block-end: 2px solid black;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto 1fr;
+}
+
+.irs .backLink {
+  align-self: flex-start;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin-right: 5px;
+}
+
+.irs .title {
+  margin-block-start: 5px;
+  margin-block-end: 10px;
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-inline-end: 10px;
+}
+
+.irs .description {
+  margin-block-start: 0;
+  margin-block-end: 5px;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.irs .vouchersSection {
+  display: flex;
+  flex-flow: row nowrap;
+  border-block-end: 2px solid black;
+}
+
+.irs .sectionLabel {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding: 10px;
+}
+
+.irs .sectionTitle {
+  font-size: 20px;
+  font-weight: 900;
+  margin-block-end: 10px;
+}
+
+.irs .sectionSubTitle {
+  margin-top: 10px;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 16px;
+}
+
+.irs .vouchers {
+  flex: 1 1 auto;
+  min-width: 0;
+  background-color: var(--green-light);
+}
+
+.irs .voucher {
+  padding: 5px;
+  border: 0 solid black;
+  border-block-end-width: 1px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.irs .voucher strong {
+  order: 2;
+  margin-left: auto;
+}
+
+.irs .creator {
+  padding: 0;
+}
+
+.irs .voucher:last-of-type {
+  border-block-end: 0;
+}
+
+.irs .creator .label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.irs .creator .input {
+  flex: 0 0 auto;
+  width: auto;
+}

@@ -1,7 +1,59 @@
+/*
 .PollForm {
 
 }
 
-.PollForm.irs {
+.irs {
 
+}
+*/
+
+.irs .pollName {
+  border: 0 solid black;
+  border-block-end-width: 2px;
+}
+
+.irs .candidatesForm {
+  border: 0 solid black;
+  border-block-end-width: 2px;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.irs .candidatesLabel {
+  flex: 0 0 auto;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.irs .candidatesInputs {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
+}
+
+.irs .actions {
+  border: 0 solid black;
+  border-block-start-width: 2px;
+  display: flex;
+  flex-flow: row nowrap;
+  order: 1;
+}
+
+.irs .deleter {
+  margin-inline-start: auto;
+  order: 2;
+}
+
+.irs .inviter {
+  border: 0 solid black;
+  border-block-start-width: 1px;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
+  text-align: center;
 }
