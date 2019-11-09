@@ -1,7 +1,8 @@
-import assert from "assert";
-import "../imports/api/polls.tests.js";
-import "../imports/api/ballots.tests.js";
-import "../imports/api/ballotVouchers.tests.js";
+// import assert from 'assert';
+// import '../imports/api/polls.tests.js';
+// import '../imports/api/ballots.tests.js';
+// import '../imports/api/ballotVouchers.tests.js';
+import '../imports/ui/Results/Winners/Winners.test.js';
 // import "../imports/api/tasks.tests.js";
 //
 // describe("simple-todos-react", function () {

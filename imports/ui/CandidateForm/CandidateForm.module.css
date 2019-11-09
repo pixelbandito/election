@@ -1,13 +1,14 @@
-.CandidateForm {
+.irs {
   background: var(--green-light);
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .irs .Candidate {
   border: 0 solid black;
-}
-
-.irs .Candidate {
   border-bottom-width: 1px;
+  flex: 1 1 auto;
+  min-height: 3ex;
 }
 
 .irs .Candidate:last-of-type {
@@ -28,8 +29,4 @@
 
 .newCandidateButton {
   flex: 0 0 auto;
-}
-
-.irs {
-
 }

@@ -46,7 +46,7 @@ const PageHeader = ({
       <div className={classNames(styles.action, styles.filter)}>
         <label
           className={styles.filterLabel}
-          htmlForm="labelFilter"
+          htmlFor="labelFilter"
         >
           <input
             className={styles.filterCheck}

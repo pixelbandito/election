@@ -2,17 +2,16 @@
 // React
 import React, { createRef, Fragment, useEffect, useState } from 'react';
 // Everything else
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import classNames from 'classnames';
 
 // Local imports
 // ../
 import AccountsUIWrapper from '../AccountsUIWrapper.js';
-import Button from '../Button';
+import Button, { LinkButton } from '../Button';
 import CandidateForm from '../CandidateForm';
 import Controls from '../Controls';
-import Input from '../Input';
 import WithThemeCssModule from '../WithThemeCssModule';
 // ./
 import styles from './PollForm.module.css';
@@ -196,7 +195,7 @@ const PollForm = ({
       )}
       {currentUser && (
         <Fragment>
-          <section>
+          <section className={styles.pollName}>
             <Controls.Text
               fill
               inputProps={{
@@ -210,14 +209,16 @@ const PollForm = ({
               label="Poll name"
             />
           </section>
-          <section>
-            <label>Candidates</label>
-            <CandidateForm
-              key={resetDate}
-              onSetCandidates={handleSetCandidates}
-              candidates={pollForm.candidates}
-              poll={pollForm}
-            />
+          <section className={styles.candidatesForm}>
+            <label className={styles.candidatesLabel}>Candidates</label>
+            <div className={styles.candidatesInputs}>
+              <CandidateForm
+                key={resetDate}
+                onSetCandidates={handleSetCandidates}
+                candidates={pollForm.candidates}
+                poll={pollForm}
+              />
+            </div>
           </section>
           <section className={classNames(styles.formControl, styles.checkboxControl)}>
             <Controls.Checkbox
@@ -265,18 +266,16 @@ const PollForm = ({
           </section>
           <section className={styles.actions}>
             {pollForm._id && ownedByCurrentUser && (
-              <div style={{ float: 'right' }}>
-                <Button
-                  className={styles.action}
-                  onClick={handleClickDelete}
-                  style={{ color: 'red' }}
-                >
-                  🗑 Delete
-                </Button>
-              </div>
+              <Button
+                className={classNames(styles.action, styles.deleter)}
+                onClick={handleClickDelete}
+                style={{ color: 'red' }}
+              >
+                🗑 Delete
+              </Button>
             )}
             <Button
-              className={styles.action}
+              className={classNames(styles.action, styles.submitter)}
               type="submit"
             >
               Submit
@@ -285,8 +284,8 @@ const PollForm = ({
         </Fragment>
       )}
       {pollForm._id && pollForm.anonymous && ownedByCurrentUser && (
-        <div>
-          <Link to={`/polls/${pollForm._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
+        <div className={styles.inviter}>
+          <LinkButton to={`/polls/${pollForm._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</LinkButton>
         </div>
       )}
     </form>

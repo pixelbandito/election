@@ -1,0 +1,90 @@
+.Ballots {
+  display: block;
+}
+
+.metrics {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.metric {
+  text-align: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.metric .label {
+  display: block;
+}
+
+.metric .value {
+  display: block;
+  font-weight: bold;
+  font-size: var(--font-size--lg);
+}
+
+.earlyResults {
+  align-items: stretch;
+  border-block-end: 1px solid black;
+  border-block-start: 1px solid black;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.earlyResults h2 {
+  font-size: 20px;
+  font-weight: 900;
+  margin-block-end: 10px;
+}
+
+.earlyResults .label {
+  padding: 20px;
+}
+
+.candidates {
+  align-items: stretch;
+  background-color: var(--green-light);
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  padding-inline-start: 20px;
+}
+
+.candidate {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 10px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.percentOfVotes {
+  margin-inline-end: 0.5em;
+  font-size: 20px;
+  font-weight: bold;
+  order: 1;
+}
+
+.name {
+  font-family: "Times New Roman", Georgia, serif;
+  order: 3;
+}
+
+.votes {
+  margin-inline-end: 1em;
+  order: 2;
+}
+
+.votes::before {
+  content: "(";
+}
+
+.votes::after {
+  content: ")";
+}

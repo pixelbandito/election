@@ -46,4 +46,5 @@ body :global {
 
 .irs:global {
   --green-light: #e9ffec;
+  --font-size--lg: 2rem;
 }
