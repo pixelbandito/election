@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
 import { BallotVouchers as BallotVouchersApi } from '../../../api/ballotVouchers';
+import { LinkButton } from '../../Button';
 import WithClassName from '../../WithClassName';
 import WithThemeCssModule from '../../WithThemeCssModule';
 import { getRoundVotes } from '../utils';
@@ -24,11 +24,7 @@ export const Ballots = ({
   const firstRoundResults = useMemo(() => getRoundVotes({ ballotsArray }), [ballotsArray]);
   const candidates = [...poll.candidates];
   const ownedByCurrentUser = poll.ownerId === (currentUser || {})._id;
-
-  const ballotVouchers = useMemo(() => {
-    console.log({ passedBallotVouchers });
-    return passedBallotVouchers;
-  }, [passedBallotVouchers]);
+  const ballotVouchers = useMemo(() => passedBallotVouchers, [passedBallotVouchers]);
 
   const usedBallotVoucherUuids = useMemo(() => (
     ballotVouchers
@@ -87,11 +83,9 @@ export const Ballots = ({
         </ul>
       </section>
       {poll._id && poll.anonymous && ownedByCurrentUser && (
-        <section className={styles.invite}>
-          <div>
-            <Link to={`/polls/${poll._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</Link>
-          </div>
-        </section>
+        <div className={styles.inviter}>
+          <LinkButton style={{ display: 'block' }} to={`/polls/${poll._id}/ballot-vouchers`}>Invite people to take your poll anonymously!</LinkButton>
+        </div>
       )}
     </div>
   );

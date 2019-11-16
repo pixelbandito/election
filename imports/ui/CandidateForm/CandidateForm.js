@@ -78,7 +78,6 @@ const CandidateForm = ({
   }
 
   const handleKeyUpNewCandidateName = event => {
-    console.log(event.key);
     if (event.key === 'Enter') {
       submitAddCandidateForm(event);
     }
