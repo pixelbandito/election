@@ -39,37 +39,16 @@ const Results = ({
       <section className={styles.header}>
         <h1>&ldquo;{poll.name}&rdquo; Results</h1>
       </section>
-      <Tabs>
-        <Tab>
-          <NavLinkButton to={`/polls/${poll._id}/results/winners`} >
-            View winners
-          </NavLinkButton>
-        </Tab>
-        <Tab>
-          <NavLinkButton to={`/polls/${poll._id}/results/ballots`} >
-            View ballots
-          </NavLinkButton>
-        </Tab>
-      </Tabs>
-      <Switch>
-        <Route path="/polls/:pollId/results/winners" exact>
-          <Winners
-            ballots={ballots}
-            poll={poll}
-          />
-        </Route>
-        <Route path="/polls/:pollId/results/ballots" exact>
-          <Ballots
-            ballots={ballots}
-            ballotsArray={ballotsArray}
-            currentUser={currentUser}
-            poll={poll}
-          />
-        </Route>
-        <Route>
-          <Redirect to={`/polls/${poll._id}/results/winners`} />
-        </Route>
-      </Switch>
+      <Ballots
+        ballots={ballots}
+        ballotsArray={ballotsArray}
+        currentUser={currentUser}
+        poll={poll}
+      />
+      <Winners
+        ballots={ballots}
+        poll={poll}
+      />
     </div>
   );
 };

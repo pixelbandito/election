@@ -1,0 +1,18 @@
+.irs {
+  padding: 40px;
+  text-align: center;
+}
+
+.irs.Winners--won {
+  background: #fffde9;
+}
+
+.irs .winner {
+  margin: 1.5ex 0;
+  font-family: "Times New Roman", Georgia, serif;
+}
+
+.irs .winner--0 {
+  font-size: 2em;
+  font-weight: bold;
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 import Button from '../../Button';
 import WithClassName from '../../WithClassName';
@@ -101,7 +102,9 @@ const Winners = ({
   }
 
   return (
-    <div {...passedProps} >
+    <div {...passedProps} className={classNames(styles.Winners, passedProps.className, {
+        [styles['Winners--won']]: !!winnerIds.length,
+      })}>
       {errorMessage && (
         <section className={styles.error}>
           {errorMessage}
@@ -110,21 +113,32 @@ const Winners = ({
       <section className={styles.calculate}>
         <Button
           className={styles.calculateButton}
+          disabled={!!winnerIds.length ? true : undefined}
           onClick={handleClickCalculateWinners}
         >
           Calculate winners!
         </Button>
+        {!winnerIds.length && (
+          <p>
+            This will also disable your poll. Don&apos;t look at the winners until you don&apos;t want to accept any more votes!
+          </p>
+        )}
       </section>
-      <section className={styles.winners}>
+      <section className={styles.winnersSection}>
         {!!winnerIds.length && (
-          <ul className={styles.winnersList}>
-            {winnerIds.map(winnerId => {
+          <ul className={styles.winners}>
+            {winnerIds.map((winnerId, index) => {
+              // Find range of winners. 0-0, 0-2, etc.
+              // Translate that range to 1 - 2
+              // Subtract that number from 2.
+              const fontSize = 2 - index * (1 / (winnerIds.length - 1));
               const winner = poll.candidates.find(candidate => candidate.id === winnerId);
               if (winner && winner.name) {
                 return (
                   <li
-                    className={styles.winner}
+                    className={classNames(styles.winner, styles[`winner--${index}`])}
                     key={winnerId}
+                    style={{ fontSize: `${fontSize.toFixed(2)}rem`}}
                   >
                     {winner.name}
                   </li>

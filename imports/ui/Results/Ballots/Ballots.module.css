@@ -1,8 +1,8 @@
-.Ballots {
+.irs {
   display: block;
 }
 
-.metrics {
+.irs .metrics {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -10,23 +10,23 @@
   margin: 20px 0;
 }
 
-.metric {
+.irs .metric {
   text-align: center;
   flex: 0 1 auto;
   min-width: 0;
 }
 
-.metric .label {
+.irs .metric .label {
   display: block;
 }
 
-.metric .value {
+.irs .metric .value {
   display: block;
   font-weight: bold;
   font-size: var(--font-size--lg);
 }
 
-.earlyResults {
+.irs .earlyResults {
   align-items: stretch;
   border-block-end: 1px solid black;
   border-block-start: 1px solid black;
@@ -34,17 +34,17 @@
   flex-flow: row nowrap;
 }
 
-.earlyResults h2 {
+.irs .earlyResults h2 {
   font-size: 20px;
   font-weight: 900;
   margin-block-end: 10px;
 }
 
-.earlyResults .label {
+.irs .earlyResults .label {
   padding: 20px;
 }
 
-.candidates {
+.irs .candidates {
   align-items: stretch;
   background-color: var(--green-light);
   flex: 1 1 auto;
@@ -54,7 +54,7 @@
   padding-inline-start: 20px;
 }
 
-.candidate {
+.irs .candidate {
   flex: 1 1 auto;
   min-height: 0;
   padding: 10px;
@@ -64,27 +64,35 @@
   justify-content: flex-start;
 }
 
-.percentOfVotes {
+.irs .percentOfVotes {
   margin-inline-end: 0.5em;
   font-size: 20px;
   font-weight: bold;
   order: 1;
 }
 
-.name {
+.irs .name {
   font-family: "Times New Roman", Georgia, serif;
   order: 3;
 }
 
-.votes {
+.irs .votes {
   margin-inline-end: 1em;
   order: 2;
 }
 
-.votes::before {
+.irs .votes::before {
   content: "(";
 }
 
-.votes::after {
+.irs .votes::after {
   content: ")";
+}
+
+.irs .inviter {
+  display: grid;
+  grid-template-columns: 1;
+  grid-template-rows: 1;
+  text-align: center;
+  border-block-end: 1px solid black;
 }
