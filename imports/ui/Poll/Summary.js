@@ -27,6 +27,8 @@ const Summary = ({
 
   const dateCreated = new Date(poll.dateCreated).toLocaleString(window.navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
 
+  console.log('Summary', { currentUser });
+
   return (
     <li className={classNames(className, styles.Summary, {
       [styles.editable]: ownedByCurrentUser,
@@ -57,7 +59,7 @@ const Summary = ({
               ) : ''}
             </Media>
             <div className={styles.meta}>
-              <p className={styles.byline}>By {currentUser.username} on {dateCreated}</p>
+              <p className={styles.byline}>By {poll.ownerId} on {dateCreated}</p>
               {poll.candidates && poll.candidates.length && (
                 <p className={styles.candidates}>Candidates: {poll.candidates.map(c => c.name).join(', ')}</p>
               )}

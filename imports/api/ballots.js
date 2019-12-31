@@ -1,40 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check, Match } from 'meteor/check';
-import shortid from 'shortid';
 
 import { Polls } from './polls.js';
 import { BallotVouchers } from './ballotVouchers.js';
 
 export const Ballots = new Mongo.Collection('ballots');
-
-// Type from initial prototype
-/*
-import shortid from 'shortid';
-
-export const defaultBallot = {
-  candidateRanks: [],
-  dateSubmitted: new Date(0).valueOf(),
-  id: '',
-  pollId: '',
-  submitted: false,
-  voterName: ''
-};
-
-export const generateBallot = (ballot) => ({
-  ...defaultBallot,
-  dateSubmitted: new Date().valueOf(),
-  id: shortid.generate(),
-  pollId: shortid.generate(),
-  ...ballot,
-});
-
-export default {
-  defaultBallot,
-  generateBallot,
-};
-
-*/
 
 export const creatableBallotType = {
   ballotVoucherUuid: Match.Maybe(String),

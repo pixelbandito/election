@@ -1,19 +1,20 @@
 // Third-party imports
 // React
-import React from 'react';
+import React from 'react'
 // Everything else
-import { Route, Switch } from 'react-router-dom';
-import classNames from 'classnames';
+import { Route, Switch } from 'react-router-dom'
+import classNames from 'classnames'
 
 // Local imports
 // ../
-import { LinkButton } from '../Button';
-import { themeKeys } from '../ThemeContext';
-import AccountsUIWrapper from '../AccountsUIWrapper.js';
-import BackLink from '../BackLink';
-import WithThemeCssModule from '../WithThemeCssModule';
+import { LinkButton } from '../Button'
+import buttonStyle from '../Button/Button.module.css'
+import { themeKeys } from '../ThemeContext'
+import AccountsUIWrapper from '../AccountsUIWrapper.js'
+import BackLink from '../BackLink'
+import WithThemeCssModule from '../WithThemeCssModule'
 // ./
-import styles from './PageHeader.module.css';
+import styles from './PageHeader.module.css'
 
 const PageHeader = ({
   className,
@@ -22,13 +23,13 @@ const PageHeader = ({
   myPollsCount,
   setHideNotMine,
   setThemeKey,
-  themeKey,
+  themeKey
 }) => (
   <header className={classNames(className, styles.PageHeader)}>
     <div className={styles.header}>
       <h1 className={styles.title}>
         <Switch>
-          <Route path="/polls" exact />
+          <Route path='/polls' exact />
           <Route>
             <span className={styles.homeLink}>
               <BackLink />
@@ -42,19 +43,25 @@ const PageHeader = ({
     <div className={styles.actions}>
       <div className={classNames(styles.action, styles.account)}>
         <AccountsUIWrapper />
+        <LinkButton
+          className={classNames(className, buttonStyle.clear)}
+          to='/profile'
+        >
+          Profile
+        </LinkButton>
       </div>
       <div className={classNames(styles.action, styles.filter)}>
         <label
           className={styles.filterLabel}
-          htmlFor="labelFilter"
+          htmlFor='labelFilter'
         >
           <input
             className={styles.filterCheck}
             checked={hideNotMine}
-            id="labelFilter"
+            id='labelFilter'
             onClick={() => setHideNotMine(!hideNotMine)}
             readOnly
-            type="checkbox"
+            type='checkbox'
           />
           Show only my polls
         </label>
@@ -62,7 +69,7 @@ const PageHeader = ({
       <div className={classNames(styles.action, styles.create)}>
         <LinkButton
           className={styles.createButton}
-          to="/polls/create"
+          to='/polls/create'
         >
           Create a poll
         </LinkButton>
@@ -70,13 +77,13 @@ const PageHeader = ({
       <div className={classNames(styles.action, styles.theme)}>
         <label
           className={styles.themeLabel}
-          htmlFor="selectTheme"
+          htmlFor='selectTheme'
         >
           Choose a theme
         </label>
         <select
           className={styles.themeSelect}
-          id="selectTheme"
+          id='selectTheme'
           onChange={(event) => setThemeKey(event.target.value)}
         >
           {themeKeys.map(key => <option key={key}>{key}</option>)}
@@ -84,6 +91,6 @@ const PageHeader = ({
       </div>
     </div>
   </header>
-);
+)
 
-export default WithThemeCssModule(PageHeader, styles);
+export default WithThemeCssModule(PageHeader, styles)
