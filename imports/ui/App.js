@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
@@ -33,6 +33,9 @@ const App = ({
 }) => {
   const [hideNotMine, setHideNotMine] = useState(false)
   const [themeKey, setThemeKey] = useState('irs')
+  const currentUserProfile = useMemo(() => currentUserProfiles && currentUserProfiles.length ? currentUserProfiles[0] : undefined, [currentUserProfiles])
+
+  console.log({ currentUserProfile })
 
   return (
     <LazyProvider>
@@ -40,8 +43,9 @@ const App = ({
         <Router>
           <div className={classNames(styles.App, styles[themeKey])}>
             <PageHeader
-              myPollsCount={myPollsCount}
+              currentUserProfile={currentUserProfile}
               hideNotMine={hideNotMine}
+              myPollsCount={myPollsCount}
               setHideNotMine={setHideNotMine}
               setThemeKey={setThemeKey}
             />
@@ -68,7 +72,7 @@ const App = ({
                     currentUser={currentUser}
                     handleInsertUserProfile={userProfile => /* { console.log('insert', userProfile) } */ Meteor.call('userProfiles.insert', userProfile)}
                     handleSetUserProfile={userProfile => /* { console.log('set', userProfile) } */ Meteor.call('userProfiles.set', userProfile)}
-                    currentUserProfile={currentUserProfiles && currentUserProfiles.length ? currentUserProfiles[0] : undefined}
+                    currentUserProfile={currentUserProfile}
                   />
                 )}
               />
