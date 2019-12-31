@@ -9,7 +9,7 @@ export default () => {
   const [view, setView] = useState(null);
 
   useEffect(() => {
-    if (!current) { return; }
+    if (!current) { return }
 
     // Use Meteor Blaze to render login buttons
     // console.log('ref.current', current);

@@ -3,7 +3,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { assert, expect } from 'chai';
-import shortid from 'shortid';
 
 import { Polls } from './polls.js';
 
@@ -12,7 +11,6 @@ if (Meteor.isServer) {
     describe('methods', () => {
       const userId = Random.id();
       let pollId;
-      let candidateId = shortid.generate();
 
       beforeEach(() => {
         Polls.remove({});
@@ -119,12 +117,30 @@ if (Meteor.isServer) {
         it('fails with no user', () => {
           const invocation = { userId: null };
 
+          const creatablePoll = {
+            multivote: false,
+            anonymous: false,
+            candidates: [],
+            enabled: false,
+            public: false,
+            name: 'Poll Bar',
+          };
+
           assert.throws(() => insertPoll.apply(invocation, [{ ...creatablePoll }]));
           assert.equal(Polls.find().count(), 1);
         });
 
         it('fails when you try to insert a poll that already exists', () => {
           const invocation = { userId: null };
+
+          const creatablePoll = {
+            multivote: false,
+            anonymous: false,
+            candidates: [],
+            enabled: false,
+            public: false,
+            name: 'Poll Bar',
+          };
 
           assert.throws(() => insertPoll.apply(invocation, [{
             ...creatablePoll,

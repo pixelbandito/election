@@ -2,7 +2,7 @@
 
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 
 import { Polls } from './polls.js';
 import { Ballots } from './ballots.js';
