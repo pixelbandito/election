@@ -18,6 +18,7 @@ import styles from './PageHeader.module.css'
 
 const PageHeader = ({
   className,
+  currentUserProfile,
   hideNotMine,
   location,
   myPollsCount,
@@ -47,7 +48,7 @@ const PageHeader = ({
           className={classNames(className, buttonStyle.clear)}
           to='/profile'
         >
-          Profile
+          {(currentUserProfile && currentUserProfile.userName) || 'Profile'}
         </LinkButton>
       </div>
       <div className={classNames(styles.action, styles.filter)}>

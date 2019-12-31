@@ -24,10 +24,7 @@ const Summary = ({
   ownedByCurrentUser,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-
   const dateCreated = new Date(poll.dateCreated).toLocaleString(window.navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
-
-  console.log('Summary', { currentUser });
 
   return (
     <li className={classNames(className, styles.Summary, {

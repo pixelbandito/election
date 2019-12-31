@@ -1,0 +1,45 @@
+# Tests to write
+
+- When not logged in (a visitor):
+  - On the polls screen:
+    - You can't click "Create a poll" (prompt to log in?)
+    - You can't toggle "Show only my polls" (prompt to log in?)
+    - You can select a theme. ✅
+    - You can see public, enabled polls:
+    - You can't see non-public polls
+    - You can't see disabled polls
+    - For each public, enabled poll:
+      - You can see the poll name ✅
+      - You can see the poll date (enabled) ✅
+      - You can see the public user name of poll owner
+      - You can see a list of candidates ✅
+      - You can see how many people have voted on it. ✅
+      - You can't drill into the poll details. (prompt to log in?)
+  - You can log in. ✅
+- When logged in:
+  - On the polls screen:
+    - You can log out. ✅
+    - You can click "Profile". ✅
+    - You can see your public user name.
+    - You can click "Create a poll" ✅
+    - You can toggle "Show only my polls"
+    - You can select a theme. ✅
+    - You can toggle "Show only my polls"
+    - You can see your polls. ✅
+    - You can see a "(Private)" status for your polls that aren't public. ✅
+    - You can see a "(Disabled)" status for your polls that aren't enabled. ✅
+    - If "Show only my polls" is off:
+      - You can see other people's public polls. ✅
+    - If "Show only my polls" is on:
+      - You can't see other people's polls.
+    - You can click "Vote" to go to the voting screen for other people's public enabled polls.
+    - You can click "Vote" to go to the voting screen for your own enabled polls.
+    - You can click the pencil icon to go to the poll editor.
+    - You can click "View results" to go to the results screen.
+  - On the voting screen:
+  - On the poll editor:
+  - On the results screen:
+  - On the user profile screen:
+    - You can edit your public name. ✅
+    - You can autogenerate a public name.
+    - You can't erase your public name.
