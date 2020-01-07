@@ -90,7 +90,7 @@ const UserProfile = ({
     >
       <h1>Profile</h1>
       {currentUser && (!currentUserProfile || !currentUserProfile.userName) && (
-        <div class={styles.warning}>
+        <div className={styles.warning}>
           <h3>Please add a public user name!</h3>
           <p>
             It helps the community see that the polls aren't all created by robots.
