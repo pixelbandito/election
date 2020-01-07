@@ -97,11 +97,15 @@
 .irs .themeSelect {
   -moz-appearance: none;
   -webkit-appearance: none;
-  background: #F1F4FF;
+  background: #f1f4ff;
   border-radius: 0;
   border-width: 0;
   flex: 1 1 auto;
   padding: 5px;
+}
+
+.irs .dropdownCaret {
+  margin-left: 0.5rem;
 }
 
 .friendly .title {

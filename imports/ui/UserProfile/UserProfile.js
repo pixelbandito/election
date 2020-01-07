@@ -16,6 +16,7 @@ const UserProfile = ({
   currentUserProfile,
   handleInsertUserProfile,
   handleSetUserProfile,
+  userProfilesReady,
   ...passedProps
 }) => {
   console.log(currentUserProfile)
@@ -26,6 +27,28 @@ const UserProfile = ({
   const initUserName = useMemo(() => initUserProfile.userName || '', [initUserProfile.userName])
   const [formUserName, setFormUserName] = useState(initUserName)
 
+  const handleSafeSetUserProfile = async (userProfile) => {
+    try {
+      handleSetUserProfile({
+        ...initUserProfile,
+        userName: formUserName
+      })
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  const handleSafeInsertUserProfile = async (userProfile) => {
+    try {
+      handleInsertUserProfile({
+        ...initUserProfile,
+        userName: formUserName
+      })
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
   useEffect(() => {
     setFormUserName(initUserName)
     return () => setFormUserName('')
@@ -33,11 +56,11 @@ const UserProfile = ({
 
   const onSubmitForm = useCallback((event) => {
     if (useInsert) {
-      handleInsertUserProfile({
+      handleSafeInsertUserProfile({
         userName: formUserName
       })
     } else {
-      handleSetUserProfile({
+      handleSafeSetUserProfile({
         ...initUserProfile,
         userName: formUserName
       })
@@ -57,7 +80,7 @@ const UserProfile = ({
     setFormUserName(initUserName)
   }
 
-  if (!currentUser || !currentUser._id) {
+  if (!currentUser || !currentUser._id || !userProfilesReady) {
     return null
   }
 
@@ -65,7 +88,16 @@ const UserProfile = ({
     <div
       className={classNames(className, styles.UserProfile)}
     >
-      Profile
+      <h1>Profile</h1>
+      {currentUser && (!currentUserProfile || !currentUserProfile.userName) && (
+        <div class={styles.warning}>
+          <h3>Please add a public user name!</h3>
+          <p>
+            It helps the community see that the polls aren't all created by robots.
+            <span role='img' aria-label='smile'>😄</span>
+          </p>
+        </div>
+      )}
       <form
         onSubmit={onSubmitForm}
       >

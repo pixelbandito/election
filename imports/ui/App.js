@@ -29,13 +29,12 @@ const App = ({
   myPollsCount,
   polls,
   pollsReady,
-  currentUserProfiles
+  currentUserProfiles,
+  userProfilesReady
 }) => {
   const [hideNotMine, setHideNotMine] = useState(false)
   const [themeKey, setThemeKey] = useState('irs')
   const currentUserProfile = useMemo(() => currentUserProfiles && currentUserProfiles.length ? currentUserProfiles[0] : undefined, [currentUserProfiles])
-
-  console.log({ currentUserProfile })
 
   return (
     <LazyProvider>
@@ -63,6 +62,9 @@ const App = ({
                 <LazyComponent />
               </LazyRoute>
             </div>
+            {(currentUser && userProfilesReady && !!(!currentUserProfile || !currentUserProfile.userName)) ? (
+              <Redirect to='/profile' />
+            ) : null}
             <Switch>
               <Route
                 path='/profile'
@@ -73,6 +75,7 @@ const App = ({
                     handleInsertUserProfile={userProfile => /* { console.log('insert', userProfile) } */ Meteor.call('userProfiles.insert', userProfile)}
                     handleSetUserProfile={userProfile => /* { console.log('set', userProfile) } */ Meteor.call('userProfiles.set', userProfile)}
                     currentUserProfile={currentUserProfile}
+                    userProfilesReady={userProfilesReady}
                   />
                 )}
               />
@@ -164,6 +167,7 @@ export default withTracker(() => {
     myPollsCount: PollsApi.find({ ownerId: (currentUser && currentUser._id) || '_notLoggedIn' }).count(),
     currentUser,
     userProfilesHandler,
+    userProfilesReady: userProfilesHandler.ready(),
     currentUserProfiles: UserProfilesApi.find({ ownerId: (currentUser && currentUser._id) || '_notLoggedIn' }, {}).fetch()
   }
 })(App)

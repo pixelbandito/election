@@ -10,6 +10,7 @@ if (Meteor.isServer) {
   describe('UserProfiles', () => {
     describe('methods', () => {
       const userId = Random.id()
+      const userId2 = Random.id()
       let beforeUserProfileCount
       let userDataId
 
@@ -45,6 +46,13 @@ if (Meteor.isServer) {
             assert.equal(UserProfiles.find().count(), beforeUserProfileCount)
           })
 
+          it('fails with no userName', () => {
+            const invocation = { userId }
+
+            assert.throws(() => insertUserProfile.apply(invocation, [{ ...creatableUserProfile, userName: '' }]), 'invalid-name')
+            assert.equal(UserProfiles.find().count(), beforeUserProfileCount)
+          })
+
           it('fails to insert a new userProfile for a user who has one', () => {
             const invocation = { userId }
             // Throws an error from a third party package, so not tested here
@@ -58,6 +66,17 @@ if (Meteor.isServer) {
             // Throws an error from a third party package, so not tested here
             assert.throws(() => insertUserProfile.apply(invocation, [{ ...creatableUserProfile, _id: userDataId }]))
             assert.equal(UserProfiles.find().count(), beforeUserProfileCount)
+          })
+
+          it('fails to insert a userProfile with a colliding userName', () => {
+            let invocation = { userId }
+            insertUserProfile.apply(invocation, [{ ...creatableUserProfile }])
+            assert.equal(UserProfiles.find().count(), beforeUserProfileCount + 1)
+
+            // Throws an error from a third party package, so not tested here
+            invocation = { userId: userId2 }
+            assert.throws(() => insertUserProfile.apply(invocation, [{ ...creatableUserProfile }]))
+            assert.equal(UserProfiles.find().count(), beforeUserProfileCount + 1)
           })
         })
 
@@ -74,11 +93,11 @@ if (Meteor.isServer) {
             const now = new Date()
 
             insertUserProfile.apply(invocation, [{
-              userName: 'Sam'
+              userName: 'Taylor'
             }])
 
             const userData = UserProfiles.find({ ownerId: samsUserId }).fetch()[0]
-            assert.equal(userData.userName, 'Sam')
+            assert.equal(userData.userName, 'Taylor')
             assert.equal(userData.dateCreated, userData.dateUpdated)
             assert.equal(Math.abs(userData.dateCreated - now.valueOf()) < 100, true)
             assert.equal(UserProfiles.find().count(), beforeUserProfileCount + 1)

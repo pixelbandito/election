@@ -44,17 +44,26 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized')
     }
 
-    // prevUserProfile, 1st definition: A pre-existing userProfile with the same ID
-    let prevUserProfile = (userProfile._id && UserProfiles.findOne(userProfile._id)) || null
+    if (!userProfile.userName) {
+      throw new Meteor.Error('invalid-name')
+    }
 
-    // prevUserProfile, 2nd definition: This is for inserts only, there should be no ownerId attached
-    if (!prevUserProfile) {
-      prevUserProfile = userProfile.ownerId ? 'ownerId exists' : null
+    // prevUserProfile, 1st definition: A pre-existing userProfile with the same ID
+    let prevUserProfileError = (userProfile._id && UserProfiles.findOne(userProfile._id)) ? 'User profile already exists.' : null
+
+    // prevUserProfileError, 2nd definition: This is for inserts only, there should be no ownerId attached
+    if (!prevUserProfileError) {
+      prevUserProfileError = userProfile.ownerId ? 'This user already has a profile.' : null
+    }
+
+    // prevUserProfileError, 3rd definition: userNames must be unique
+    if (!prevUserProfileError) {
+      prevUserProfileError = UserProfiles.findOne({ userName: userProfile.userName }) ? 'This user name is taken' : null
     }
 
     // Make sure the userProfile doesn't already exist
-    if (prevUserProfile) {
-      throw new Meteor.Error('invalid-request')
+    if (prevUserProfileError) {
+      throw new Meteor.Error(`invalid-request: ${prevUserProfileError}`)
     }
 
     UserProfiles.insert({

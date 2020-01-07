@@ -11,29 +11,31 @@
   text-decoration: none;
 }
 
+.Button:visited {
+  color: blue;
+}
+
 .Button:active,
 .Button.active {
   color: black;
 }
 
 .Button:disabled,
-.Button.disabled {
+.Button.disabled,
+.Button[disabled] {
   color: #666;
+  pointer-events: none;
 }
 
-.Button:hover:not(:disabled) {
+.Button:hover:not(:disabled):not(.disabled):not([disabled]) {
   background-color: #ccc;
 }
 
-.Button:focus:not(:disabled) {
+.Button:focus:not(:disabled):not(.disabled):not([disabled]) {
   border-color: blue;
   outline-color: blue;
   position: relative;
   z-index: 1;
-}
-
-.Button:visited:not(:focus):not(:active):not(.active) {
-  color: blue;
 }
 
 .Button.clear {

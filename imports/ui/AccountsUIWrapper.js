@@ -1,28 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Template } from 'meteor/templating';
-import { Blaze } from 'meteor/blaze';
+import React, { useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Template } from 'meteor/templating'
+import { Blaze } from 'meteor/blaze'
 
 export default () => {
-  const ref = useRef(null);
-  const { current } = ref;
-  const [view, setView] = useState(null);
+  const ref = useRef(null)
+  const blazeViewRef = useRef(null)
 
   useEffect(() => {
-    if (!current) { return }
+    if (!ref.current) { return }
 
     // Use Meteor Blaze to render login buttons
-    // console.log('ref.current', current);
-    setView(Blaze.render(
+    blazeViewRef.current = Blaze.render(
       Template.loginButtons,
-      ReactDOM.findDOMNode(current),
-    ));
+      ReactDOM.findDOMNode(ref.current)
+    )
 
-    // console.log('clean up', view);
     // Clean up Blaze view
-    return () => Blaze.remove(view);
-  }, [current]);
+    return () => blazeViewRef.current ? Blaze.remove(blazeViewRef.current) : null
+  }, [])
 
-  // Just render a placeholder container that will be filled in
-  return <span ref={ref} />;
+  // Render a placeholder container that will be filled in
+  return (
+    <>
+      <style>
+        {`
+          #login-buttons {
+            display: block;
+            margin-right: 0;
+          }
+
+          #login-name-link {
+            display: block;
+          }
+        `}
+      </style>
+      <span ref={ref} />
+    </>
+  )
 }
